@@ -20,6 +20,7 @@ public class CustomerService {
 		try {
 			Optional<Customer> customerOpt = customerRepo.findByUsername(user);
 			Customer customer = customerOpt.orElseThrow(() -> new CustomerNotFoundException());
+			
 			boolean hasEnoughCredit = total <= customer.getTotalAvailible();
 			if (hasEnoughCredit) {
 				customer.setTotalAvailible(customer.getTotalAvailible() - total);
