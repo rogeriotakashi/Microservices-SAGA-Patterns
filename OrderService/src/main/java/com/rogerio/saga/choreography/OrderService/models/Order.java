@@ -16,18 +16,41 @@ public class Order {
 	private int id;
 	
 	@NotNull
-	private String status;
+	private int status;
 	
-	public Order() {
-		super();
-	}
+	@NotNull
+	private String user;
 	
-	public String getStatus() {
+	@NotNull
+	private double total;
+	
+	public Order() {}
+	
+	public int getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+
+	public void setStatus(int status) {
 		this.status = status;
 	}
+
+	public double getTotal() {
+		return total;
+	}
+
+	public void setTotal(double total) {
+		this.total = total;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+	
+	
 	
 
 	
