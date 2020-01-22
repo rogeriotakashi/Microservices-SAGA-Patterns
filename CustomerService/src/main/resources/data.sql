@@ -6,3 +6,6 @@ CREATE TABLE Customer (
   name VARCHAR(200) NOT NULL,
   total_availible DOUBLE NOT NULL
 );
+
+INSERT INTO Customer (username, name, total_availible) VALUES
+  ('rogi', 'rogerio', 1000.00);

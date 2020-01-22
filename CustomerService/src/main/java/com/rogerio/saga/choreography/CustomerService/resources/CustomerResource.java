@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rogerio.saga.choreography.CustomerService.CustomerStatusEnum;
 import com.rogerio.saga.choreography.CustomerService.models.requests.ReserveCreditRequest;
 import com.rogerio.saga.choreography.CustomerService.services.CustomerService;
 
@@ -22,8 +23,11 @@ public class CustomerResource {
 
 	@PostMapping("/reserve-credit")
 	public HttpEntity<String> reserveCredit(@RequestBody ReserveCreditRequest req) {
-		customerService.reserveCredit(req.getUser(), req.getTotal());
+		CustomerStatusEnum status = customerService.reserveCredit(req.getUser(), req.getTotal());		
+		if(status == CustomerStatusEnum.RESERVED) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}		
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		
-		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

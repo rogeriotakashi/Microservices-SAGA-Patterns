@@ -24,6 +24,7 @@ public class CustomerService {
 			boolean hasEnoughCredit = total <= customer.getTotalAvailible();
 			if (hasEnoughCredit) {
 				customer.setTotalAvailible(customer.getTotalAvailible() - total);
+				customerRepo.flush();
 				return CustomerStatusEnum.RESERVED;
 			} else {
 				return CustomerStatusEnum.INSUFICIENT_CREDIT;
