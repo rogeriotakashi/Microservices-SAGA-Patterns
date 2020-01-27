@@ -1,5 +1,7 @@
 package com.rogerio.saga.choreography.OrderService.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +15,21 @@ public class OrderService {
 	@Autowired
 	private OrderRepository orderRepo;
 
-	public void createOrder(String user, double total) {
+	public Order createOrder(String user, double total) {
 		Order order = new Order();
 		order.setUser(user);
 		order.setTotal(total);
 		order.setStatus(OrderStatusEnum.PENDING.getStatus());
 		
-		orderRepo.save(order);
+		return orderRepo.save(order);
+	}
+
+	public void approveOrder(Long orderId) {
+		Optional<Order> order = orderRepo.findById(orderId);
+		if(order.isPresent()) {
+			order.get().setStatus(OrderStatusEnum.APPROVED.getStatus());
+			orderRepo.saveAndFlush(order.get());
+		}
+		
 	}
 }

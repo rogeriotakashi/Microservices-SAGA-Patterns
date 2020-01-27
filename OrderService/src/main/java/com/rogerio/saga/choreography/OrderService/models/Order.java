@@ -13,7 +13,7 @@ public class Order {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	
 	@NotNull
 	private int status;
@@ -24,6 +24,18 @@ public class Order {
 	@NotNull
 	private double total;
 	
+	
+	
+	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Order() {}
 	
 	public int getStatus() {

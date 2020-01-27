@@ -1,4 +1,4 @@
-package com.rogerio.saga.choreography.CustomerService.models.requests;
+package com.rogerio.saga.choreography.OrderService.models.requests;
 
 public class ReserveCreditRequest {
 	
@@ -9,6 +9,7 @@ public class ReserveCreditRequest {
 	public ReserveCreditRequest() {	}
 	
 	public ReserveCreditRequest(String user, double total, Long orderId) {
+		super();
 		this.user = user;
 		this.total = total;
 		this.orderId = orderId;

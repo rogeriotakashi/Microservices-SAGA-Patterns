@@ -1,4 +1,4 @@
-package com.rogerio.saga.choreography.CustomerService;
+package com.rogerio.saga.choreography.CustomerService.enums;
 
 public enum CustomerStatusEnum {
 	RESERVED,

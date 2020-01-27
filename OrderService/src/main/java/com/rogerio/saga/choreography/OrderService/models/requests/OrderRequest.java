@@ -1,4 +1,4 @@
-package com.rogerio.saga.choreography.OrderService.models.request;
+package com.rogerio.saga.choreography.OrderService.models.requests;
 
 public class OrderRequest {
 	

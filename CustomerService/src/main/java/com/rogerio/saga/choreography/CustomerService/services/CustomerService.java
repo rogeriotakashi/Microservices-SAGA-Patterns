@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rogerio.saga.choreography.CustomerService.CustomerStatusEnum;
+import com.rogerio.saga.choreography.CustomerService.enums.CustomerStatusEnum;
 import com.rogerio.saga.choreography.CustomerService.exceptions.CustomerNotFoundException;
 import com.rogerio.saga.choreography.CustomerService.models.Customer;
 import com.rogerio.saga.choreography.CustomerService.repositories.CustomerRepository;
