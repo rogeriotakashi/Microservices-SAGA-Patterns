@@ -32,9 +32,9 @@ public class OrderResource {
 		
 		// Calling reserve-credit service
 		ReserveCreditRequest reserveCreditRequest = new ReserveCreditRequest(order.getUser(), order.getTotal(), order.getId());
-		rest.postForObject("http://CUSTOMER-SERVICE/api/v1/customer/reserve-credit", reserveCreditRequest, HttpEntity.class);
+		ResponseEntity<?> response = rest.postForEntity("http://CUSTOMER-SERVICE/api/v1/customer/reserve-credit", reserveCreditRequest, HttpEntity.class);
 		
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		return new ResponseEntity<>(response.getStatusCode());
 	}
 		
 	@PostMapping("/approve")

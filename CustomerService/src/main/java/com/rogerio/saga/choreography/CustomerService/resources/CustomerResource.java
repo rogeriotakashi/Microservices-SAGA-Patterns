@@ -32,8 +32,8 @@ public class CustomerResource {
 	public HttpEntity<String> reserveCredit(@RequestBody ReserveCreditRequest req) {
 		CustomerStatusEnum status = customerService.reserveCredit(req.getUser(), req.getTotal());		
 		if(status == CustomerStatusEnum.RESERVED) {
-			rest.postForObject("http://ORDER-SERVICE/api/v1/order/approve", new ApproveRequest(req.getOrderId()) , HttpEntity.class);
-			return new ResponseEntity<>(HttpStatus.OK);
+			ResponseEntity<?> response = rest.postForEntity("http://ORDER-SERVICE/api/v1/order/approve", new ApproveRequest(req.getOrderId()) , HttpEntity.class);
+			return new ResponseEntity<>(response.getStatusCode());
 		}		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		
