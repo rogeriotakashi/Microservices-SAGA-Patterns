@@ -42,6 +42,12 @@ public class OrderResource {
 	@PostMapping("/approve")
 	public ResponseEntity<String> approveOrder(@RequestBody OrderResultRequest req) {
 		orderService.approveOrder(req.getOrderId());		
+		
+		// Process ordered products
+		// ProcessOrderRequest processOrderRequest  = new ProcessOrderRequest();
+		// ResponseEntity<?> response = rest.postForEntity("http://STOCK-SERVICE/api/v1/stock/processOrder", processOrderRequest, HttpEntity.class);
+
+				
 		return new ResponseEntity<>(HttpStatus.OK);
 	} 
 	
