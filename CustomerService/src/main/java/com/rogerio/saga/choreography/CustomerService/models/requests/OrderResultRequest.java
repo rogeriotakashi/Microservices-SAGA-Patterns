@@ -1,13 +1,13 @@
 package com.rogerio.saga.choreography.CustomerService.models.requests;
 
-public class ApproveRequest {
+public class OrderResultRequest {
 
 	private Long orderId;
 
-	public ApproveRequest() {
+	public OrderResultRequest() {
 	}
 
-	public ApproveRequest(Long orderId) {
+	public OrderResultRequest(Long orderId) {
 		this.orderId = orderId;
 	}
 

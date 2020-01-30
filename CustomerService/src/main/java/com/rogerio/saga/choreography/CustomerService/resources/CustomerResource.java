@@ -31,17 +31,20 @@ public class CustomerResource {
 	@PostMapping("/reserve-credit")
 	public HttpEntity<String> reserveCredit(@RequestBody ReserveCreditRequest req) {
 		CustomerStatusEnum status = customerService.reserveCredit(req.getUser(), req.getTotal());
+		ResponseEntity<?> response = null;
 		
-		if(status == CustomerStatusEnum.RESERVED) {
-			ResponseEntity<?> response = rest.postForEntity("http://ORDER-SERVICE/api/v1/order/approve", new OrderResultRequest(req.getOrderId()) , HttpEntity.class);
-			return new ResponseEntity<>(response.getStatusCode());
-		} else if (status == CustomerStatusEnum.INSUFICIENT_CREDIT) {
-			ResponseEntity<?> response = rest.postForEntity("http://ORDER-SERVICE/api/v1/order/reject", new OrderResultRequest(req.getOrderId()) , HttpEntity.class);
-			return new ResponseEntity<>(response.getStatusCode());
+		switch(status) {	
+			case RESERVED:
+				response = rest.postForEntity("http://ORDER-SERVICE/api/v1/order/approve", new OrderResultRequest(req.getOrderId()) , HttpEntity.class);
+				break;
+			case INSUFICIENT_CREDIT:
+				response = rest.postForEntity("http://ORDER-SERVICE/api/v1/order/reject", new OrderResultRequest(req.getOrderId()) , HttpEntity.class);
+				break;
+			case CUSTOMER_NOT_FOUND:
+				rest.delete("http://ORDER-SERVICE/api/v1/order/delete/" + req.getOrderId());
 		}
-		
-		rest.delete("http://ORDER-SERVICE/api/v1/order/delete/" + req.getOrderId());
-		return new ResponseEntity<>(HttpStatus.OK);	
+		HttpStatus responseStatus = response != null ? response.getStatusCode() : HttpStatus.OK;
+		return new ResponseEntity<>(responseStatus);	
 	}
 	
 

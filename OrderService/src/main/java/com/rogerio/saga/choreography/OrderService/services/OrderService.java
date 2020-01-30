@@ -33,6 +33,14 @@ public class OrderService {
 		
 	}
 
+	public void rejectOrder(Long orderId) {
+		Optional<Order> order = orderRepo.findById(orderId);
+		if(order.isPresent()) {
+			order.get().setStatus(OrderStatusEnum.REJECTED.getStatus());
+			orderRepo.saveAndFlush(order.get());
+		}
+	}
+	
 	public void deleteOrder(Long id) {
 		orderRepo.deleteById(id);
 	}
