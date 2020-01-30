@@ -32,4 +32,8 @@ public class OrderService {
 		}
 		
 	}
+
+	public void deleteOrder(Long id) {
+		orderRepo.deleteById(id);
+	}
 }

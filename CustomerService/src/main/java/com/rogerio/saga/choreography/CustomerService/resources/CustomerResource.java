@@ -34,8 +34,9 @@ public class CustomerResource {
 		if(status == CustomerStatusEnum.RESERVED) {
 			ResponseEntity<?> response = rest.postForEntity("http://ORDER-SERVICE/api/v1/order/approve", new ApproveRequest(req.getOrderId()) , HttpEntity.class);
 			return new ResponseEntity<>(response.getStatusCode());
-		}		
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
 		
+		rest.delete("http://ORDER-SERVICE/api/v1/order/delete/" + req.getOrderId());
+		return new ResponseEntity<>(HttpStatus.OK);	
 	}
 }
