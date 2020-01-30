@@ -1,2 +1,2 @@
-# SAGA-Choreography-Example
-Simple SAGA Choreography pattern implementation for study case
+# SAGA-Choreography-Examples
+Simple SAGA pattern implementations for study case
