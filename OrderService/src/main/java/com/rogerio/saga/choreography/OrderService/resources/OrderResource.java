@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.rogerio.saga.choreography.OrderService.models.Order;
-import com.rogerio.saga.choreography.OrderService.models.requests.ApproveRequest;
+import com.rogerio.saga.choreography.OrderService.models.requests.OrderResultRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.OrderRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.ReserveCreditRequest;
 import com.rogerio.saga.choreography.OrderService.services.OrderService;
@@ -40,8 +40,14 @@ public class OrderResource {
 	}
 		
 	@PostMapping("/approve")
-	public ResponseEntity<String> approveOrder(@RequestBody ApproveRequest req) {
+	public ResponseEntity<String> approveOrder(@RequestBody OrderResultRequest req) {
 		orderService.approveOrder(req.getOrderId());		
+		return new ResponseEntity<>(HttpStatus.OK);
+	} 
+	
+	@PostMapping("/reject")
+	public ResponseEntity<String> rejectOrder(@RequestBody OrderResultRequest req) {
+		orderService.rejectOrder(req.getOrderId());		
 		return new ResponseEntity<>(HttpStatus.OK);
 	} 
 	

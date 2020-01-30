@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.rogerio.saga.choreography.CustomerService.enums.CustomerStatusEnum;
-import com.rogerio.saga.choreography.CustomerService.models.requests.ApproveRequest;
+import com.rogerio.saga.choreography.CustomerService.models.requests.OrderResultRequest;
 import com.rogerio.saga.choreography.CustomerService.models.requests.ReserveCreditRequest;
 import com.rogerio.saga.choreography.CustomerService.services.CustomerService;
 
@@ -30,13 +30,19 @@ public class CustomerResource {
 
 	@PostMapping("/reserve-credit")
 	public HttpEntity<String> reserveCredit(@RequestBody ReserveCreditRequest req) {
-		CustomerStatusEnum status = customerService.reserveCredit(req.getUser(), req.getTotal());		
+		CustomerStatusEnum status = customerService.reserveCredit(req.getUser(), req.getTotal());
+		
 		if(status == CustomerStatusEnum.RESERVED) {
-			ResponseEntity<?> response = rest.postForEntity("http://ORDER-SERVICE/api/v1/order/approve", new ApproveRequest(req.getOrderId()) , HttpEntity.class);
+			ResponseEntity<?> response = rest.postForEntity("http://ORDER-SERVICE/api/v1/order/approve", new OrderResultRequest(req.getOrderId()) , HttpEntity.class);
+			return new ResponseEntity<>(response.getStatusCode());
+		} else if (status == CustomerStatusEnum.INSUFICIENT_CREDIT) {
+			ResponseEntity<?> response = rest.postForEntity("http://ORDER-SERVICE/api/v1/order/reject", new OrderResultRequest(req.getOrderId()) , HttpEntity.class);
 			return new ResponseEntity<>(response.getStatusCode());
 		}
 		
 		rest.delete("http://ORDER-SERVICE/api/v1/order/delete/" + req.getOrderId());
 		return new ResponseEntity<>(HttpStatus.OK);	
 	}
+	
+
 }
