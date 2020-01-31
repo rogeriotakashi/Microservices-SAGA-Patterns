@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.rogerio.saga.choreography.OrderService.models.Order;
-import com.rogerio.saga.choreography.OrderService.models.requests.OrderResultRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.OrderRequest;
+import com.rogerio.saga.choreography.OrderService.models.requests.OrderResultRequest;
+import com.rogerio.saga.choreography.OrderService.models.requests.ProcessOrderRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.ReserveCreditRequest;
 import com.rogerio.saga.choreography.OrderService.services.OrderService;
 
@@ -44,8 +45,8 @@ public class OrderResource {
 		orderService.approveOrder(req.getOrderId());		
 		
 		// Process ordered products
-		// ProcessOrderRequest processOrderRequest  = new ProcessOrderRequest();
-		// ResponseEntity<?> response = rest.postForEntity("http://STOCK-SERVICE/api/v1/stock/processOrder", processOrderRequest, HttpEntity.class);
+		ProcessOrderRequest processOrderRequest  = new ProcessOrderRequest();
+		ResponseEntity<?> response = rest.postForEntity("http://STOCK-SERVICE/api/v1/stock/processOrder", processOrderRequest, HttpEntity.class);
 
 				
 		return new ResponseEntity<>(HttpStatus.OK);

@@ -6,4 +6,5 @@ CREATE TABLE Stock (
   quantity INT NOT NULL
 );
 
-INSERT INTO Stock (product_id, quantity) VALUES (1,50)
+INSERT INTO Stock (product_id, quantity) VALUES (1,50);
+INSERT INTO Stock (product_id, quantity) VALUES (2,20);
