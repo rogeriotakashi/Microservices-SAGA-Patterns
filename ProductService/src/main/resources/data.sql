@@ -9,3 +9,6 @@ CREATE TABLE Products (
 
 INSERT INTO Products (name,price) VALUES
   ('Coke',2.99);
+  
+INSERT INTO Products (name,price) VALUES
+('Orange Juice',5.99);

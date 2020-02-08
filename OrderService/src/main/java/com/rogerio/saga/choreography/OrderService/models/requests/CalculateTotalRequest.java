@@ -4,26 +4,14 @@ import java.util.List;
 
 import com.rogerio.saga.choreography.OrderService.models.ProductOrdered;
 
-public class OrderRequest {
-	
-	private String user;
+public class CalculateTotalRequest {
 	private List<ProductOrdered> productsOrdered;
-	private double total;
-	
-	public OrderRequest(String user, double total) {
-		super();
-		this.user = user;
-		this.total = total;
-	}
 
-	public String getUser() {
-		return user;
-	}
+	public CalculateTotalRequest() {}
 
-	public void setUser(String user) {
-		this.user = user;
+	public CalculateTotalRequest(List<ProductOrdered> productsOrdered) {
+		this.productsOrdered = productsOrdered;
 	}
-	
 
 	public List<ProductOrdered> getProductsOrdered() {
 		return productsOrdered;
@@ -32,15 +20,6 @@ public class OrderRequest {
 	public void setProductsOrdered(List<ProductOrdered> productsOrdered) {
 		this.productsOrdered = productsOrdered;
 	}
-
-	public double getTotal() {
-		return total;
-	}
-
-	public void setTotal(double total) {
-		this.total = total;
-	}
-	
 	
 	
 }

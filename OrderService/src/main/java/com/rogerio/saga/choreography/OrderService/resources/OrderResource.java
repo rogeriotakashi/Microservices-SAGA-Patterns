@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.rogerio.saga.choreography.OrderService.models.Order;
+import com.rogerio.saga.choreography.OrderService.models.requests.CalculateTotalRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.OrderRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.OrderResultRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.ProcessOrderRequest;
@@ -33,11 +34,16 @@ public class OrderResource {
 	public ResponseEntity<String> createPendingOrder(@RequestBody OrderRequest request) {
 		Order order = orderService.createOrder(request.getUser(),request.getTotal());
 		
+		// Calculate the total price
+		CalculateTotalRequest calculateTotalRequest = new CalculateTotalRequest(request.getProductsOrdered());
+		ResponseEntity<?> calculateTotalResponse = rest.postForEntity("http://PRODUCT-SERVICE/api/v1/product/calculate-total", calculateTotalRequest, HttpEntity.class);
+		 // TODO: Sum the total		
+		
 		// Calling reserve-credit service
 		ReserveCreditRequest reserveCreditRequest = new ReserveCreditRequest(order.getUser(), order.getTotal(), order.getId());
-		ResponseEntity<?> response = rest.postForEntity("http://CUSTOMER-SERVICE/api/v1/customer/reserve-credit", reserveCreditRequest, HttpEntity.class);
+		ResponseEntity<?> reservCredtiResponse = rest.postForEntity("http://CUSTOMER-SERVICE/api/v1/customer/reserve-credit", reserveCreditRequest, HttpEntity.class);
 		
-		return new ResponseEntity<>(response.getStatusCode());
+		return new ResponseEntity<>(reservCredtiResponse.getStatusCode());
 	}
 		
 	@PostMapping("/approve")

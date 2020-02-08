@@ -1,4 +1,4 @@
-package com.rogerio.saga.choreography.OrderService.models;
+package com.rogerio.ProductService.models;
 
 
 public class ProductOrdered {
