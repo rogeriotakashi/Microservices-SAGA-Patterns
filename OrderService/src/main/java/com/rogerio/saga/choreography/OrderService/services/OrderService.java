@@ -16,10 +16,12 @@ public class OrderService {
 	private OrderRepository orderRepo;
 
 	public Order createOrder(String user, double total) {
-		Order order = new Order();
+		Order order = new Order();;
 		order.setUser(user);
 		order.setTotal(total);
 		order.setStatus(OrderStatusEnum.PENDING.getStatus());
+		
+		
 		
 		return orderRepo.save(order);
 	}
