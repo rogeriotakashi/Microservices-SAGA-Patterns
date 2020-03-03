@@ -18,6 +18,7 @@ import com.rogerio.saga.choreography.OrderService.models.requests.OrderRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.OrderResultRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.ProcessOrderRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.ReserveCreditRequest;
+import com.rogerio.saga.choreography.OrderService.models.response.CalculateTotalResponse;
 import com.rogerio.saga.choreography.OrderService.services.OrderService;
 
 @RestController
@@ -36,8 +37,9 @@ public class OrderResource {
 		
 		// Calculate the total price
 		CalculateTotalRequest calculateTotalRequest = new CalculateTotalRequest(request.getProductsOrdered());
-		ResponseEntity<?> calculateTotalResponse = rest.postForEntity("http://PRODUCT-SERVICE/api/v1/product/calculate-total", calculateTotalRequest, HttpEntity.class);
-		 // TODO: Sum the total		
+		CalculateTotalResponse calculateTotalResponse = rest.postForObject("http://PRODUCT-SERVICE/api/v1/product/calculate-total", calculateTotalRequest, CalculateTotalResponse.class);
+		double total = calculateTotalResponse.getTotal();
+		// TODO: Sum the total		
 		
 		// Calling reserve-credit service
 		ReserveCreditRequest reserveCreditRequest = new ReserveCreditRequest(order.getUser(), order.getTotal(), order.getId());
