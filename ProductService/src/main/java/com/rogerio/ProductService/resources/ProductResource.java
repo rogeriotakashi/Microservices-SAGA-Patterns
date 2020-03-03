@@ -23,11 +23,11 @@ public class ProductResource {
 	@PostMapping("/calculate-total")
 	public ResponseEntity<CalculateTotalResponse> calculateTotal(@RequestBody CalculateTotalRequest req){
 		
-		if(req.getProductsOrdered() == null || req.getProductsOrdered().isEmpty()) {
+		if(req.getProducts() == null || req.getProducts().isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		double total = productService.calculateTotal(req.getProductsOrdered());
+		double total = productService.calculateTotal(req.getProducts());
 		CalculateTotalResponse response = new CalculateTotalResponse(total);
 				
 		return new ResponseEntity<>(response, HttpStatus.OK);

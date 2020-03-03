@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rogerio.saga.choreography.OrderService.models.Order;
-import com.rogerio.saga.choreography.OrderService.models.requests.OrderRequest;
-import com.rogerio.saga.choreography.OrderService.models.requests.OrderResultRequest;
-import com.rogerio.saga.choreography.OrderService.services.CustomerService;
+import com.rogerio.saga.choreography.OrderService.models.requests.ApproveOrderRequest;
+import com.rogerio.saga.choreography.OrderService.models.requests.CreateOrderRequest;
+import com.rogerio.saga.choreography.OrderService.models.requests.RejectOrderRequest;
+import com.rogerio.saga.choreography.OrderService.models.response.CreateOrderResponse;
 import com.rogerio.saga.choreography.OrderService.services.OrderService;
-import com.rogerio.saga.choreography.OrderService.services.ProductService;
-import com.rogerio.saga.choreography.OrderService.services.StockService;
 
 @RestController
 @RequestMapping("/api/v1/order")
@@ -24,49 +23,30 @@ public class OrderResource {
 	
 	@Autowired
 	OrderService orderService;
-	
-	@Autowired
-	ProductService productService;
-	
-	@Autowired
-	CustomerService customerService;
-	
-	@Autowired
-	StockService stockService;
-	
+		
 
 	@PostMapping("/create")
-	public ResponseEntity<String> createPendingOrder(@RequestBody OrderRequest request) {
-		
-		double total = productService.calculateTotal(request.getProductsOrdered());
-		Order order = orderService.createOrder(request.getUser(), total);
-		ResponseEntity<?> reservCredtiResponse = customerService.reserveCredit(order);
-		
-		return new ResponseEntity<>(reservCredtiResponse.getStatusCode());
+	public ResponseEntity<CreateOrderResponse> createPendingOrder(@RequestBody CreateOrderRequest req) {	
+		Order order = orderService.createOrder(req.getUser(), req.getTotal());
+		CreateOrderResponse response = new CreateOrderResponse(order);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@PostMapping("/approve")
-	public ResponseEntity<String> approveOrder(@RequestBody OrderResultRequest req) {
-		
+	public ResponseEntity<String> approveOrder(@RequestBody ApproveOrderRequest req) {	
 		orderService.approveOrder(req.getOrderId());		
-		ResponseEntity<?> processOrderStatus = stockService.processOrder();
-		
-		return new ResponseEntity<>(processOrderStatus.getStatusCode());
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PostMapping("/reject")
-	public ResponseEntity<String> rejectOrder(@RequestBody OrderResultRequest req) {
-		
-		orderService.rejectOrder(req.getOrderId());
-		
+	public ResponseEntity<String> rejectOrder(@RequestBody RejectOrderRequest req) {
+		orderService.rejectOrder(req.getOrderId());	
 		return new ResponseEntity<>(HttpStatus.OK);
 	} 
 	
 	@DeleteMapping("/delete/{orderId}")
-	public ResponseEntity<String> rejectOrder(@PathVariable(value="orderId") Long id) {
-		
+	public ResponseEntity<String> rejectOrder(@PathVariable(value="orderId") Long id) {	
 		orderService.deleteOrder(id);
-		
 		return new ResponseEntity<>(HttpStatus.OK);
 	} 
 	
