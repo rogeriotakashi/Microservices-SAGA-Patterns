@@ -6,5 +6,9 @@ import lombok.Data;
 public class CalculateTotalResponse {
 
 	double total;
+
+	public CalculateTotalResponse(double total) {
+		this.total = total;
+	}
 	
 }

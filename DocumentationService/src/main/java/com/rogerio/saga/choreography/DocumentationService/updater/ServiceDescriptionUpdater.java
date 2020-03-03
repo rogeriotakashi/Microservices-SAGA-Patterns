@@ -46,8 +46,7 @@ public class ServiceDescriptionUpdater {
 	
 	@Scheduled(fixedDelayString = "${swagger.config.refreshrate}")
 	public void refreshSwaggerConfigurations() {
-		logger.debug("Starting Service Definitions Context refresh");
-		
+		logger.debug("Starting Service Definitions Context refresh");	
 		discoveryClient.getServices().stream().forEach(serviceId -> {
 			logger.debug("Attempting service definition refresh for Service: {}", serviceId);
 			List<ServiceInstance> serviceInstances = discoveryClient.getInstances(serviceId);
@@ -64,8 +63,7 @@ public class ServiceDescriptionUpdater {
 					definitionContext.addServiceDefinition(serviceId, content);
 				} else {
 					logger.error("Skipping service id : {} Error: Could not get Swagger definition from API.",serviceId);
-				}
-				
+				}			
 				logger.info("Service Definition Context Refreshed at : {} ", LocalDate.now());
 			}
 		});

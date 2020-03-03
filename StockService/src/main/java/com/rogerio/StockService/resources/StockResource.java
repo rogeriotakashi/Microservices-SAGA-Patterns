@@ -20,9 +20,6 @@ import com.rogerio.StockService.services.StockService;
 public class StockResource {
 
 	@Autowired
-	RestTemplate rest;
-	
-	@Autowired
 	StockService stockService;
 	
 	@PostMapping("/process")
@@ -35,9 +32,11 @@ public class StockResource {
 				return new ResponseEntity<>(HttpStatus.OK);
 			case PRODUCT_NOT_AVAILIBLE:
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			case PRODUCT_NOT_FOUND:
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		return null;
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 	}
 	

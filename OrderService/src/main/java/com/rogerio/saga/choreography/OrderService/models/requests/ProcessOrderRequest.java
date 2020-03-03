@@ -2,7 +2,7 @@ package com.rogerio.saga.choreography.OrderService.models.requests;
 
 import java.util.List;
 
-import com.rogerio.saga.choreography.OrderService.models.ProductOrdered;
+import com.rogerio.saga.choreography.OrderService.models.ProductsOrdered;
 
 import lombok.Data;
 
@@ -10,6 +10,6 @@ import lombok.Data;
 public class ProcessOrderRequest {
 	
 	private Long orderId;
-	private List<ProductOrdered> productsOrdered;
+	private List<ProductsOrdered> productsOrdered;
 
 }

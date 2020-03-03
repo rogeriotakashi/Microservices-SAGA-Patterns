@@ -2,16 +2,16 @@ package com.rogerio.saga.choreography.OrderService.models.requests;
 
 import java.util.List;
 
-import com.rogerio.saga.choreography.OrderService.models.ProductOrdered;
+import com.rogerio.saga.choreography.OrderService.models.ProductsOrdered;
 
 import lombok.Data;
 
 @Data
 public class CalculateTotalRequest {
 	
-	private List<ProductOrdered> productsOrdered;
+	private List<ProductsOrdered> productsOrdered;
 
-	public CalculateTotalRequest(List<ProductOrdered> productsOrdered) {
+	public CalculateTotalRequest(List<ProductsOrdered> productsOrdered) {
 		this.productsOrdered = productsOrdered;
 	}
 	

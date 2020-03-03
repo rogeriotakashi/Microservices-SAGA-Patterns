@@ -14,9 +14,7 @@ import com.rogerio.saga.choreography.CustomerService.enums.CustomerStatusEnum;
 import com.rogerio.saga.choreography.CustomerService.models.requests.OrderResultRequest;
 import com.rogerio.saga.choreography.CustomerService.models.requests.ReserveCreditRequest;
 import com.rogerio.saga.choreography.CustomerService.services.CustomerService;
-
-
-
+import com.rogerio.saga.choreography.CustomerService.services.OrderService;
 
 @RestController
 @RequestMapping("api/v1/customer")
@@ -27,6 +25,9 @@ public class CustomerResource {
 	
 	@Autowired
 	CustomerService customerService;
+	
+	@Autowired
+	OrderService orderService;
 
 	@PostMapping("/reserve-credit")
 	public HttpEntity<String> reserveCredit(@RequestBody ReserveCreditRequest req) {
@@ -35,17 +36,15 @@ public class CustomerResource {
 		
 		switch(status) {	
 			case RESERVED:
-				response = rest.postForEntity("http://ORDER-SERVICE/api/v1/order/approve", new OrderResultRequest(req.getOrderId()) , HttpEntity.class);
+				response = orderService.approve(req.getOrderId());
 				break;
 			case INSUFICIENT_CREDIT:
-				response = rest.postForEntity("http://ORDER-SERVICE/api/v1/order/reject", new OrderResultRequest(req.getOrderId()) , HttpEntity.class);
+				response = orderService.reject(req.getOrderId());
 				break;
 			case CUSTOMER_NOT_FOUND:
-				rest.delete("http://ORDER-SERVICE/api/v1/order/delete/" + req.getOrderId());
+				orderService.delete(req.getOrderId());
 		}
 		HttpStatus responseStatus = response != null ? response.getStatusCode() : HttpStatus.OK;
 		return new ResponseEntity<>(responseStatus);	
 	}
-	
-
 }
