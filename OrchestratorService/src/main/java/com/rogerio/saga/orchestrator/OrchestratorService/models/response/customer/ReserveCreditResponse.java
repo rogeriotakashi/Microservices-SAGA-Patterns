@@ -4,8 +4,10 @@ package com.rogerio.saga.orchestrator.OrchestratorService.models.response.custom
 import com.rogerio.saga.orchestrator.OrchestratorService.enums.ReserveStatusEnum;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ReserveCreditResponse {
 	
 	private ReserveStatusEnum status;

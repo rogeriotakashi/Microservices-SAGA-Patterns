@@ -1,5 +1,7 @@
 package com.rogerio.saga.orchestrator.OrchestratorService.resources;
 
+import java.util.function.Function;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rogerio.saga.orchestrator.OrchestratorService.enums.OrderStatusEnum;
 import com.rogerio.saga.orchestrator.OrchestratorService.enums.ReserveStatusEnum;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.OrderDTO;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.OrderRequest;
@@ -46,18 +49,40 @@ public class OrchestratorResource {
 		// Reserve Credit from User
 		ReserveStatusEnum reserveStatus = customerService.reserveCredit(orderDTO);
 		
-		switch(reserveStatus) {	
-			case RESERVED:
-				ResponseEntity<?> approveOrderStatus = orderService.approveOrder(orderDTO.getId());
-				ResponseEntity<?> processOrderStatus = stockService.processOrder();	
-				break;
-			case INSUFICIENT_CREDIT:
-				orderService.rejectOrder(orderDTO.getId());
-				break;
-			case CUSTOMER_NOT_FOUND:
-				orderService.deleteOrder(orderDTO.getId());			
-		}	
+		// Get next order action based on reserve status (approved,rejected or delete)
+		Function<Long,OrderStatusEnum> nextOrderAction = getNextOrderActionByReserveStatus(reserveStatus);
+		OrderStatusEnum orderStatus = nextOrderAction.apply(orderDTO.getId());
+		
+		// Get next order action based on reserve response
+		Function<Long, OrderStatusEnum> nextOrderAction2 = getNextActionByActualOrderStatus(orderStatus);
+		OrderStatusEnum orderStatus2 = nextOrderAction2.apply(orderDTO.getId());
 		
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	private Function<Long,OrderStatusEnum> getNextOrderActionByReserveStatus(ReserveStatusEnum reserveStatus) {
+		switch(reserveStatus) {	
+			case RESERVED:
+				return (T) -> orderService.approveOrder(T);
+			case INSUFICIENT_CREDIT:
+				return (T) -> orderService.rejectOrder(T);
+			case CUSTOMER_NOT_FOUND:
+				return (T) -> orderService.deleteOrder(T);
+		}
+		
+		return null;
+	}
+	
+	private Function<Long, OrderStatusEnum> getNextActionByActualOrderStatus(OrderStatusEnum orderStatus) {
+		switch(orderStatus) {	
+			case APPROVED:
+				return (T) -> stockService.processOrder(T);
+			case NOT_APPROVED:
+				break;
+		default:
+			break;
+		}
+		
+		return null;	
 	}
 }

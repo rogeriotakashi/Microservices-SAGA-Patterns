@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rogerio.saga.choreography.OrderService.enums.OrderStatusEnum;
 import com.rogerio.saga.choreography.OrderService.models.Order;
 import com.rogerio.saga.choreography.OrderService.models.requests.ApproveOrderRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.CreateOrderRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.RejectOrderRequest;
+import com.rogerio.saga.choreography.OrderService.models.response.ApproveOrderResponse;
 import com.rogerio.saga.choreography.OrderService.models.response.CreateOrderResponse;
 import com.rogerio.saga.choreography.OrderService.services.OrderService;
 
@@ -33,9 +35,10 @@ public class OrderResource {
 	}
 
 	@PostMapping("/approve")
-	public ResponseEntity<String> approveOrder(@RequestBody ApproveOrderRequest req) {	
-		orderService.approveOrder(req.getOrderId());		
-		return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<ApproveOrderResponse> approveOrder(@RequestBody ApproveOrderRequest req) {	
+		OrderStatusEnum status = orderService.approveOrder(req.getId());
+		ApproveOrderResponse approveOrderResponse = new ApproveOrderResponse(req.getId(), status);
+		return new ResponseEntity<>(approveOrderResponse, HttpStatus.OK);
 	}
 
 	@PostMapping("/reject")

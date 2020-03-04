@@ -3,10 +3,10 @@ package com.rogerio.saga.orchestrator.OrchestratorService.models.requests.abstra
 import lombok.Data;
 
 @Data
-public abstract class AbstractOrderRequest {
+public abstract class AbstractOrder {
 	private Long id;
 
-	public AbstractOrderRequest(Long id) {
+	public AbstractOrder(Long id) {
 		this.id = id;
 	}
 	

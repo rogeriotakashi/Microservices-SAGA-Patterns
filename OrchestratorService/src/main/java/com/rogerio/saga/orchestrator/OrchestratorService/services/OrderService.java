@@ -7,10 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.rogerio.saga.orchestrator.OrchestratorService.enums.OrderStatusEnum;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.OrderDTO;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.order.ApproveOrderRequest;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.order.CreateOrderRequest;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.order.RejectOrderRequest;
+import com.rogerio.saga.orchestrator.OrchestratorService.models.response.order.ApproveOrderResponse;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.response.order.CreateOrderResponse;
 
 @Service
@@ -25,19 +27,19 @@ public class OrderService {
 		return createOrderResponse.getOrderDTO();
 	}
 	
-	public ResponseEntity<String> approveOrder(Long orderId) {
-		ResponseEntity<?> response = rest.postForEntity("http://ORDER-SERVICE/api/v1/order/approve", new ApproveOrderRequest(orderId) , HttpEntity.class);
-		return new ResponseEntity<>(response.getStatusCode());
+	public OrderStatusEnum approveOrder(Long orderId) {
+		ApproveOrderResponse response = rest.postForObject("http://ORDER-SERVICE/api/v1/order/approve", new ApproveOrderRequest(orderId) , ApproveOrderResponse.class);
+		return response.getStatus();
 	}
 	
-	public ResponseEntity<String> rejectOrder(Long orderId) {
+	public OrderStatusEnum rejectOrder(Long orderId) {
 		ResponseEntity<?> response = rest.postForEntity("http://ORDER-SERVICE/api/v1/order/reject", new RejectOrderRequest(orderId) , HttpEntity.class);
-		return new ResponseEntity<>(response.getStatusCode());
+		return OrderStatusEnum.REJECTED;
 	}
 	
-	public ResponseEntity<String> deleteOrder(Long orderId) {
+	public OrderStatusEnum deleteOrder(Long orderId) {
 		rest.delete("http://ORDER-SERVICE/api/v1/order/delete/" + orderId);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return OrderStatusEnum.DELETED;
 	}
 
 }

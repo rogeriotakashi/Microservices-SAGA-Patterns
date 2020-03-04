@@ -1,4 +1,4 @@
-package com.rogerio.saga.choreography.OrderService.enums;
+package com.rogerio.saga.orchestrator.OrchestratorService.enums;
 
 public enum OrderStatusEnum {
 	CREATED(1),
@@ -6,7 +6,8 @@ public enum OrderStatusEnum {
 	APPROVED(3),
 	REJECTED(4),
 	CANCELED(5), 
-	NOT_APPROVED(6);
+	NOT_APPROVED(6), 
+	DELETED(7);
 	
 	private final int status;
 
