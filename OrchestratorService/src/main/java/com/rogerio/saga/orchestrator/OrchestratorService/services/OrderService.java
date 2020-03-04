@@ -2,7 +2,6 @@ package com.rogerio.saga.orchestrator.OrchestratorService.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -28,7 +27,8 @@ public class OrderService {
 	}
 	
 	public OrderStatusEnum approveOrder(Long orderId) {
-		ApproveOrderResponse response = rest.postForObject("http://ORDER-SERVICE/api/v1/order/approve", new ApproveOrderRequest(orderId) , ApproveOrderResponse.class);
+		ApproveOrderRequest approveOrderRequest = new ApproveOrderRequest(orderId);
+		ApproveOrderResponse response = rest.postForObject("http://ORDER-SERVICE/api/v1/order/approve", approveOrderRequest , ApproveOrderResponse.class);
 		return response.getStatus();
 	}
 	
