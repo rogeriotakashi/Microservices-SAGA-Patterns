@@ -1,6 +1,7 @@
 package com.rogerio.saga.choreography.OrderService.models.requests;
 
 
+import com.rogerio.saga.choreography.OrderService.enums.OrderStatusEnum;
 import com.rogerio.saga.choreography.OrderService.models.abstracts.AbstractOrder;
 
 import lombok.Data;
@@ -10,10 +11,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=false)
-public class RejectOrderRequest extends AbstractOrder{
+public class UpdateOrderStatusRequest extends AbstractOrder {
 	
-	public RejectOrderRequest(Long id) {
-		super(id);
+	OrderStatusEnum status;
+	
+	public UpdateOrderStatusRequest(Long orderId, OrderStatusEnum status) {
+		super(orderId);
+		this.status = status;
 	}
 	
 }

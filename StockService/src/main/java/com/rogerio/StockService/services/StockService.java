@@ -34,10 +34,9 @@ public class StockService {
 
 	private void processProduct(Long productId) {
 		Optional<Stock> productStockOpt = stockRepo.findByProductId(productId);
-		if(productStockOpt.isPresent()) {
-			Stock productStock = productStockOpt.get();
-			productStock.setQuantity(productStock.getQuantity() - 1);
-			stockRepo.save(productStock);
-		}
+		productStockOpt.ifPresent((product) -> {
+			product.setQuantity(product.getQuantity() - 1);
+			stockRepo.save(product);
+		});
 	}
 }

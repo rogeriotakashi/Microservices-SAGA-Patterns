@@ -4,11 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import com.rogerio.StockService.enums.ProcessStatusEnum;
 import com.rogerio.StockService.exceptions.ProductStockNotAvailibleException;
@@ -22,7 +21,7 @@ public class StockResource {
 	@Autowired
 	StockService stockService;
 	
-	@PostMapping("/process")
+	@PutMapping("/process")
 	@Transactional(rollbackFor = {ProductStockNotAvailibleException.class})
 	public ResponseEntity<String> processOrder(@RequestBody ProcessOrderRequest req) throws ProductStockNotAvailibleException {
 		ProcessStatusEnum status = stockService.processOrder(req.getProductsOrdered());
@@ -31,7 +30,7 @@ public class StockResource {
 			case SUCCESS:
 				return new ResponseEntity<>(HttpStatus.OK);
 			case PRODUCT_NOT_AVAILIBLE:
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			case PRODUCT_NOT_FOUND:
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

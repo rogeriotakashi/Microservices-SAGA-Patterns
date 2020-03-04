@@ -34,19 +34,30 @@ public class OrderService {
 			return OrderStatusEnum.APPROVED;
 		});
 		
-		return statusOptional.orElse(OrderStatusEnum.NOT_APPROVED);
+		return statusOptional.orElse(OrderStatusEnum.NOT_FOUND);
 		
 	}
 
-	public void rejectOrder(Long orderId) {
-		Optional<Order> order = orderRepo.findById(orderId);
-		if(order.isPresent()) {
-			order.get().setStatus(OrderStatusEnum.REJECTED.getStatus());
-			orderRepo.saveAndFlush(order.get());
-		}
+	public OrderStatusEnum rejectOrder(Long orderId) {
+		Optional<Order> orderOptional = orderRepo.findById(orderId);
+		Optional<OrderStatusEnum> statusOptional = orderOptional.map((order) -> {
+			order.setStatus(OrderStatusEnum.REJECTED.getStatus());
+			orderRepo.saveAndFlush(order);
+			return OrderStatusEnum.REJECTED;
+		});
+		
+		return statusOptional.orElse(OrderStatusEnum.NOT_FOUND);
 	}
 	
 	public void deleteOrder(Long id) {
 		orderRepo.deleteById(id);
+	}
+
+	public void updateOrderStatus(Long id, OrderStatusEnum status) {
+		Optional<Order> orderOptional = orderRepo.findById(id);
+		orderOptional.ifPresent((order) -> {
+			order.setStatus(status.getStatus());
+			orderRepo.saveAndFlush(order);
+		});
 	}
 }

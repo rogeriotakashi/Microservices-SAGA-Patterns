@@ -6,8 +6,9 @@ public enum OrderStatusEnum {
 	APPROVED(3),
 	REJECTED(4),
 	CANCELED(5), 
-	NOT_APPROVED(6), 
-	DELETED(7);
+	NOT_FOUND(6), 
+	DELETED(7),
+	PROCESSED(8);
 	
 	private final int status;
 

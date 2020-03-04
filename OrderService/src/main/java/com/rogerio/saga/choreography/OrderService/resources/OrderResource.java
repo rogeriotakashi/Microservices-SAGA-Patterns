@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,8 +16,10 @@ import com.rogerio.saga.choreography.OrderService.models.Order;
 import com.rogerio.saga.choreography.OrderService.models.requests.ApproveOrderRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.CreateOrderRequest;
 import com.rogerio.saga.choreography.OrderService.models.requests.RejectOrderRequest;
+import com.rogerio.saga.choreography.OrderService.models.requests.UpdateOrderStatusRequest;
 import com.rogerio.saga.choreography.OrderService.models.response.ApproveOrderResponse;
 import com.rogerio.saga.choreography.OrderService.models.response.CreateOrderResponse;
+import com.rogerio.saga.choreography.OrderService.models.response.RejectOrderResponse;
 import com.rogerio.saga.choreography.OrderService.services.OrderService;
 
 @RestController
@@ -34,16 +37,23 @@ public class OrderResource {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PostMapping("/approve")
+	@PutMapping("/approve")
 	public ResponseEntity<ApproveOrderResponse> approveOrder(@RequestBody ApproveOrderRequest req) {	
 		OrderStatusEnum status = orderService.approveOrder(req.getId());
 		ApproveOrderResponse approveOrderResponse = new ApproveOrderResponse(req.getId(), status);
 		return new ResponseEntity<>(approveOrderResponse, HttpStatus.OK);
 	}
 
-	@PostMapping("/reject")
-	public ResponseEntity<String> rejectOrder(@RequestBody RejectOrderRequest req) {
-		orderService.rejectOrder(req.getOrderId());	
+	@PutMapping("/reject")
+	public ResponseEntity<RejectOrderResponse> rejectOrder(@RequestBody RejectOrderRequest req) {
+		OrderStatusEnum status = orderService.rejectOrder(req.getId());
+		RejectOrderResponse rejectOrderResponse = new RejectOrderResponse(req.getId(), status);
+		return new ResponseEntity<>(rejectOrderResponse, HttpStatus.OK);
+	}
+	
+	@PutMapping("/update")
+	public ResponseEntity<String> updateOrderStatus(@RequestBody UpdateOrderStatusRequest req) {
+		orderService.updateOrderStatus(req.getId(), req.getStatus());
 		return new ResponseEntity<>(HttpStatus.OK);
 	} 
 	
