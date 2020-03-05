@@ -23,7 +23,7 @@ public class ProductService {
 
 	//@HystrixCommand(fallbackMethod = "fallback_calculateTotal")
 	public CalculateTotalResponse calculateTotal(List<ProductDTO> products){
-		logger.info("Calling calculate-total service");
+		logger.info("Calling calculate-total service from ProductService");
 		CalculateTotalRequest calculateTotalRequest = new CalculateTotalRequest(products);
 		CalculateTotalResponse calculateTotalResponse = rest.postForObject("http://PRODUCT-SERVICE/api/v1/product/calculate-total", calculateTotalRequest, CalculateTotalResponse.class);
 		return calculateTotalResponse;
