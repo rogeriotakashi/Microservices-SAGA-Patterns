@@ -21,12 +21,11 @@ public class ProductResource {
 	ProductsService productService;
 
 	@PostMapping("/calculate-total")
-	public ResponseEntity<CalculateTotalResponse> calculateTotal(@RequestBody CalculateTotalRequest req){
+	public ResponseEntity<CalculateTotalResponse> calculateTotal(@RequestBody CalculateTotalRequest req) throws InterruptedException{
 		
 		if(req.getProducts() == null || req.getProducts().isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		
 		double total = productService.calculateTotal(req.getProducts());
 		CalculateTotalResponse response = new CalculateTotalResponse(total);
 				

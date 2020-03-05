@@ -10,4 +10,7 @@ eureka:
 spring:
   application:
     name: Orchestrator-Service
+    
+logging:
+  file: ./orchestrator-service.log
   
