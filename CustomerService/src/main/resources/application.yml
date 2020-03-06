@@ -1,6 +1,6 @@
 spring:
  cloud:
   config:
-   uri: http://localhost:8888
+   uri: http://CONFIGURATION-SERVER
  application:
   name: Customer-Service
