@@ -1,7 +1,7 @@
 spring:
   application:
     name: Order-Service
-  cloud:    config:      uri: http://CONFIGURATION-SERVICE
-    
+  cloud:    config:      uri: http://CONFIGURATION-SERVICE  
+        
 
   

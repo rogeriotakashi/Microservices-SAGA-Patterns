@@ -47,23 +47,23 @@ public class OrchestratorResource {
 			// Calculate the total payment amount of the order
 			CalculateTotalResponse total = productService.calculateTotal(req.getProducts());
 	
-			// Create Order
-			OrderDTO orderDTO = orderService.createOrder(req.getUser(), total.getTotal());
+			// Create Order (Publishing using Kafka - Producer)
+			orderService.createOrder(req.getUser(), total.getTotal());
 	
 			// Reserve Credit from User
-			ReserveStatusEnum reserveStatus = customerService.reserveCredit(orderDTO);
+			// ReserveStatusEnum reserveStatus = customerService.reserveCredit(orderDTO);
 	
 			// Get next order action based on reserve status (approved,rejected or delete)
-			Function<Long, OrderStatusEnum> nextOrderAction = getNextOrderActionByReserveStatus(reserveStatus);
-			OrderStatusEnum orderStatus = nextOrderAction.apply(orderDTO.getId());
+			// Function<Long, OrderStatusEnum> nextOrderAction = getNextOrderActionByReserveStatus(reserveStatus);
+			// OrderStatusEnum orderStatus = nextOrderAction.apply(orderDTO.getId());
 	
 			// Get next order action based on reserve response
-			if (orderStatus == OrderStatusEnum.APPROVED) {
-				OrderStatusEnum orderStatusAfterProcess = stockService.processOrder(orderDTO.getId(), req.getProducts());
+			// if (orderStatus == OrderStatusEnum.APPROVED) {
+			//	OrderStatusEnum orderStatusAfterProcess = stockService.processOrder(orderDTO.getId(), req.getProducts());
 	
 				// Update Order status after stock process
-				orderService.updateOrderStatus(orderDTO.getId(), orderStatusAfterProcess);
-			}
+			//	orderService.updateOrderStatus(orderDTO.getId(), orderStatusAfterProcess);
+			//}
 	
 			return new ResponseEntity<>(HttpStatus.OK);
 			

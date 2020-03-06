@@ -1,8 +1,10 @@
 package com.rogerio.saga.choreography.OrderService.models.requests;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class CreateOrderRequest {
 
 	private String user;
