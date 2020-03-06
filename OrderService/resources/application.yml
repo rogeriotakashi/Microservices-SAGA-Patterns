@@ -1,7 +1,0 @@
-spring:
-  application:
-    name: Orchestrator-Service
-  cloud:    config:      uri: http://CONFIGURATION-SERVICE
-      
-
-  
