@@ -5,5 +5,4 @@
 .sonarlint/**
 **/sonarlint/*
 
-*
-.log
+*.log
