@@ -24,7 +24,7 @@ public class OrderListener {
 	@Autowired
 	KafkaTemplate<String, CreateOrderResponse> kafkaTemplate;
 	
-	@KafkaListener(topics = "${app.topic.order-request}")
+	@KafkaListener(topics = "${app.topic.order-request}", groupId = "group_json", containerFactory="orderKafkaListenerFactory")
 	public void createOrder(CreateOrderRequest req) {
 		Order order = orderService.createOrder(req.getUser(), req.getTotal());	
 		kafkaTemplate.send(topic, new CreateOrderResponse(order));
