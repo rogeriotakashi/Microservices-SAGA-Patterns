@@ -1,6 +1,7 @@
 package com.rogerio.saga.orchestrator.OrchestratorService.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -11,19 +12,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.rogerio.saga.orchestrator.OrchestratorService.enums.OrderStatusEnum;
-import com.rogerio.saga.orchestrator.OrchestratorService.models.OrderDTO;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.order.ApproveOrderRequest;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.order.CreateOrderRequest;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.order.RejectOrderRequest;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.order.UpdateOrderStatusRequest;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.response.order.ApproveOrderResponse;
-import com.rogerio.saga.orchestrator.OrchestratorService.models.response.order.CreateOrderResponse;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.response.order.RejectOrderResponse;
 
 @Service
 public class OrderService {
 	
-	private static final String ORDER_CREATE_TOPIC = "Create_Order";
+	@Value("${app.topic.order-request}")
+	private String topic;
 	
 	@Autowired
 	RestTemplate rest;
@@ -33,10 +33,7 @@ public class OrderService {
 	
 	public void createOrder(String user, double total) {
 		CreateOrderRequest createOrderRequest = new CreateOrderRequest(user, total);
-		//CreateOrderResponse createOrderResponse = rest.postForObject("http://ORDER-SERVICE/api/v1/order/create", createOrderRequest, CreateOrderResponse.class);
-		//return createOrderResponse.getOrderDTO();
-		kafkaTemplate.send(ORDER_CREATE_TOPIC, createOrderRequest);
-		
+		kafkaTemplate.send(topic, createOrderRequest);
 	}
 	
 	public OrderStatusEnum approveOrder(Long orderId) {

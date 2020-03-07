@@ -1,7 +1,7 @@
 spring:
   application:
-    name: Order-Service
-  cloud:    config:      uri: http://CONFIGURATION-SERVICE  
+    name: Orchestrator-Service
+  cloud:    config:      uri: http://CONFIGURATION-SERVICE
       
   kafka:
     consumer:
@@ -11,10 +11,9 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
 app:
  topic:
   order-request: create.order.request.t
-  order-response: create.order.response.t        
-
-  
+  order-response: create.order.response.t
