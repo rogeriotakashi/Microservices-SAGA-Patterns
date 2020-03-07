@@ -8,8 +8,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.client.RestTemplate;
+
 
 import com.rogerio.saga.orchestrator.OrchestratorService.enums.OrderStatusEnum;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.order.ApproveOrderRequest;
@@ -33,7 +37,25 @@ public class OrderService {
 	
 	public void createOrder(String user, double total) {
 		CreateOrderRequest createOrderRequest = new CreateOrderRequest(user, total);
-		kafkaTemplate.send(topic, createOrderRequest);
+		ListenableFuture<SendResult<String,CreateOrderRequest>> future = kafkaTemplate.send(topic, createOrderRequest);
+		future.addCallback(new ListenableFutureCallback<SendResult<String, CreateOrderRequest>>() {
+
+			@Override
+			public void onSuccess(SendResult<String, CreateOrderRequest> result) {
+				System.out.println("Sent message=[" + createOrderRequest + 
+			              "] with offset=[" + result.getRecordMetadata().offset() + "]");
+				
+			}
+
+			@Override
+			public void onFailure(Throwable ex) {
+				System.out.println("Unable to send message=["
+			              + createOrderRequest + "] due to : " + ex.getMessage());
+				
+			}
+			
+		});
+		
 	}
 	
 	public OrderStatusEnum approveOrder(Long orderId) {

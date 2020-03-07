@@ -20,9 +20,6 @@ public class OrderService {
 		order.setUser(user);
 		order.setTotal(total);
 		order.setStatus(OrderStatusEnum.PENDING.getStatus());
-		
-		
-		
 		return orderRepo.save(order);
 	}
 

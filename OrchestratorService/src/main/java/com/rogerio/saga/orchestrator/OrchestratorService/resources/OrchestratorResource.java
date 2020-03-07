@@ -34,8 +34,7 @@ public class OrchestratorResource {
 	@Autowired
 	OrderService orderService;
 
-	@Autowired
-	CustomerService customerService;
+	
 
 	@Autowired
 	StockService stockService;
@@ -50,8 +49,7 @@ public class OrchestratorResource {
 			// Create Order (Publishing using Kafka - Producer)
 			orderService.createOrder(req.getUser(), total.getTotal());
 	
-			// Reserve Credit from User
-			// ReserveStatusEnum reserveStatus = customerService.reserveCredit(orderDTO);
+			
 	
 			// Get next order action based on reserve status (approved,rejected or delete)
 			// Function<Long, OrderStatusEnum> nextOrderAction = getNextOrderActionByReserveStatus(reserveStatus);

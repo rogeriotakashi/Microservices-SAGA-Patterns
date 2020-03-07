@@ -1,8 +1,11 @@
 package com.rogerio.saga.orchestrator.OrchestratorService.models;
 
+
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class OrderDTO {
 
 	private Long id;
