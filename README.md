@@ -11,6 +11,16 @@ Practical implementation of microservice patterns, using a generic business case
 - Lombok 
 - Maven
 
+# To be implemented
+- Compensation Functions
+- Spring Zuul
+- JWT and OAuth2
+- Spring Feign
+- Spring Security
+- Logging
+- Docker images and Docker-Composer
+
+
 # Running Locally
 After clonning the repository, you will need:
 - Add Lombok Plugin for your IDE (https://projectlombok.org/)
