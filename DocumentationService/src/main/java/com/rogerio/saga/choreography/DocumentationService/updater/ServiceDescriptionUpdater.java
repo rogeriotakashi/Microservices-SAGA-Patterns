@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,74 +21,69 @@ import com.rogerio.saga.choreography.DocumentationService.context.ServiceDefinit
 
 /**
  * 
- *   Periodically poll the service instances and update the in memory store as key value pair
+ * Periodically poll the service instances and update the in memory store as key
+ * value pair
  */
 
 @Component
 public class ServiceDescriptionUpdater {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(ServiceDescriptionUpdater.class);
 
-	private static final String DEFAULT_SWAGGER_URL = "/v2/api-docs";
-	private static final String KEY_SWAGGER_URL = "swagger_url";
+	@Value("${updater.config.default-swagger-url}")
+	private String DEFAULT_SWAGGER_URL;
+
+	@Value("${updater.config.key-swagger-url}")
+	private String KEY_SWAGGER_URL;
+
+	@Value("${updater.config.service-suffix}")
+	private String SERVICE_SUFFIX;
 	
 	@Autowired
 	private DiscoveryClient discoveryClient;
-	
+
 	@Autowired
 	private ServiceDefinitionsContext definitionContext;
-	
-	private final RestTemplate template;
 
-	
-	public ServiceDescriptionUpdater() {
-		this.template = new RestTemplate();
-	}
-	
-	@Scheduled(fixedDelayString = "${swagger.config.refreshrate}")
+	@Autowired
+	private RestTemplate template;
+
+	@Scheduled(fixedDelayString = "${updater.config.refreshrate}")
 	public void refreshSwaggerConfigurations() {
-		logger.debug("Starting Service Definitions Context refresh");	
-		discoveryClient.getServices().stream().forEach(serviceId -> {
-			logger.debug("Attempting service definition refresh for Service: {}", serviceId);
-			List<ServiceInstance> serviceInstances = discoveryClient.getInstances(serviceId);
-			if(serviceInstances == null || serviceInstances.isEmpty()) {
-				logger.info("No instances available for service: {} ",serviceId);
-			} else {
-				ServiceInstance instance = serviceInstances.get(0);
-				String swaggerURL = this.getSwaggerURL(instance);
-
-				Optional<Object> jsonData = this.getSwaggerDefinitionForAPI(serviceId, swaggerURL);
-				
-				if(jsonData.isPresent()) {
+		logger.info("Starting Service Definitions Context refresh");
+		discoveryClient.getServices().stream()
+			.filter((serviceId) -> serviceId.contains(SERVICE_SUFFIX))
+			.forEach(serviceId -> {
+				String swaggerURL = this.getSwaggerURL(serviceId);
+				Optional<Object> jsonData = this.getSwaggerDefinitionForAPI(swaggerURL);
+	
+				if (jsonData.isPresent()) {
 					String content = getJSON(serviceId, jsonData.get());
 					definitionContext.addServiceDefinition(serviceId, content);
 				} else {
-					logger.error("Skipping service id : {} Error: Could not get Swagger definition from API.",serviceId);
-				}			
+					logger.error("Skipping service id : {} Error: Could not get Swagger definition from API.", serviceId);
+				}
+	
 				logger.info("Service Definition Context Refreshed at : {} ", LocalDate.now());
-			}
-		});
+			});
+
 	}
 	
-	
-	private String getSwaggerURL(ServiceInstance instance) {
-		String swaggerURL = instance.getMetadata().get(KEY_SWAGGER_URL);
-		return swaggerURL != null ? instance.getUri() + swaggerURL : instance.getUri() + DEFAULT_SWAGGER_URL;
+	private String getSwaggerURL(String hostname) {
+		return "http://" + hostname + DEFAULT_SWAGGER_URL;
 	}
-	
-	private Optional<Object> getSwaggerDefinitionForAPI(String serviceName, String url) {
-		logger.debug("Acessing the SwaggerDefition JSON for Service : {} : URL : {}",serviceName, url);
-	
+
+	private Optional<Object> getSwaggerDefinitionForAPI(String url) {
 		try {
-			Object jsonData = template.getForObject(url, Object.class);
+			Object jsonData = template.getForObject("" + url, Object.class);
 			return Optional.of(jsonData);
 		} catch (RestClientException ex) {
-			logger.error("Error while getting service definition for service : {} Error: {}",serviceName,ex.getMessage());
+			logger.error("Error while getting service definition for service : {} Error: {}", url, ex.getMessage());
 			return Optional.empty();
 		}
 	}
-	
-	public String getJSON(String serviceId, Object jsonData) {
+
+	private String getJSON(String serviceId, Object jsonData) {
 		try {
 			return new ObjectMapper().writeValueAsString(jsonData);
 		} catch (JsonProcessingException e) {
@@ -95,5 +91,5 @@ public class ServiceDescriptionUpdater {
 			return "";
 		}
 	}
-	
+
 }

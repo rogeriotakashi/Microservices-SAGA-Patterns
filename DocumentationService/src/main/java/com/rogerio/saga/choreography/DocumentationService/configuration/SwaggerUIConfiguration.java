@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.client.RestTemplate;
 
 import com.rogerio.saga.choreography.DocumentationService.context.ServiceDefinitionsContext;
 
@@ -27,15 +26,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 @EnableScheduling
+@EnableDiscoveryClient
 public class SwaggerUIConfiguration {
 
 	@Autowired
 	private ServiceDefinitionsContext definitionContext;
-	
-	@Bean
-	public RestTemplate getRestTemplate() {
-		return new RestTemplate();
-	}
 	
 	@Primary
 	@Bean

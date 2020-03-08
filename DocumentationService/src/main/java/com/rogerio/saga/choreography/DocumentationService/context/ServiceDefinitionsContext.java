@@ -23,7 +23,7 @@ public class ServiceDefinitionsContext {
 	private final ConcurrentHashMap<String,String> serviceDescriptions;
 
 	private ServiceDefinitionsContext() {
-		serviceDescriptions = new ConcurrentHashMap<String,String>();
+		serviceDescriptions = new ConcurrentHashMap<>();
 	}
 
 	public void addServiceDefinition(String serviceName, String serviceDescription) {
