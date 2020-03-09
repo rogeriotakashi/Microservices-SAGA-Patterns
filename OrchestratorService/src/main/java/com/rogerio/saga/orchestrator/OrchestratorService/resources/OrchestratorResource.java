@@ -14,20 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rogerio.saga.orchestrator.OrchestratorService.enums.OrderStatusEnum;
 import com.rogerio.saga.orchestrator.OrchestratorService.enums.ReserveStatusEnum;
-import com.rogerio.saga.orchestrator.OrchestratorService.models.OrderDTO;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.OrderRequest;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.response.product.CalculateTotalResponse;
-import com.rogerio.saga.orchestrator.OrchestratorService.services.CustomerService;
 import com.rogerio.saga.orchestrator.OrchestratorService.services.OrderService;
 import com.rogerio.saga.orchestrator.OrchestratorService.services.ProductService;
 import com.rogerio.saga.orchestrator.OrchestratorService.services.StockService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping(value = "api/v1")
+@Slf4j
 public class OrchestratorResource {
 	
-	private static final Logger logger = LoggerFactory.getLogger(OrchestratorResource.class);
-
 	@Autowired
 	ProductService productService;
 
@@ -41,12 +40,10 @@ public class OrchestratorResource {
 
 	@PostMapping("/order")
 	public ResponseEntity<String> order(@RequestBody OrderRequest req) {
+		log.info("Entering /order endpoint. OrderRequest: {}", req);
 
 		try {
-			// Calculate the total payment amount of the order
 			CalculateTotalResponse total = productService.calculateTotal(req.getProducts());
-	
-			// Create Order (Publishing using Kafka - Producer)
 			orderService.createOrder(req.getUser(), total.getTotal());
 	
 			
@@ -66,7 +63,7 @@ public class OrchestratorResource {
 			return new ResponseEntity<>(HttpStatus.OK);
 			
 		} catch(IllegalStateException e) {
-			logger.error("Problem calling service: " + e);
+			log.error("Problem calling service: " + e);
 			return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
 		}
 	}

@@ -11,29 +11,28 @@ import org.springframework.web.client.RestTemplate;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.ProductDTO;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.product.CalculateTotalRequest;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.response.product.CalculateTotalResponse;
+import com.rogerio.saga.orchestrator.OrchestratorService.resources.OrchestratorResource;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
+@Slf4j
 public class ProductService {
-	
-	private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 	
 	@Autowired
 	RestTemplate rest;
 
-	//@HystrixCommand(fallbackMethod = "fallback_calculateTotal")
 	public CalculateTotalResponse calculateTotal(List<ProductDTO> products){
-		logger.info("Calling calculate-total service from ProductService");
-		CalculateTotalRequest calculateTotalRequest = new CalculateTotalRequest(products);
+		log.info("Entering calculateTotal method. List of ProductsDTO {}", products);
+		
+		log.info("Creating CalculateTotalRequest using the list of products and making a request to ProductService [/product/calculate-total]");
+		CalculateTotalRequest calculateTotalRequest = new CalculateTotalRequest(products);		
 		CalculateTotalResponse calculateTotalResponse = rest.postForObject("http://PRODUCT-SERVICE/api/v1/product/calculate-total", calculateTotalRequest, CalculateTotalResponse.class);
+		
+		log.info("Creating CalculateTotalResponse {}", calculateTotalResponse);
 		return calculateTotalResponse;
 	}
-	
-	/*
-	public CalculateTotalResponse fallback_calculateTotal(List<ProductDTO> products) throws ProductServiceException{
-		throw new ProductServiceException("Error calling service calculate-total from ProductService"); 
-	}
-	*/
 	
 	
 }

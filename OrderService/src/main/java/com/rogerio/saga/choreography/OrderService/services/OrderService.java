@@ -11,32 +11,28 @@ import com.rogerio.saga.choreography.OrderService.repositories.OrderRepository;
 
 @Service
 public class OrderService {
-	
+
 	@Autowired
 	private OrderRepository orderRepo;
 
-	public Order createOrder(String user, double total) throws Exception {
-		try {
-			Order order = new Order();
-			order.setUser(user);
-			order.setTotal(total);
-			order.setStatus(OrderStatusEnum.PENDING.getStatus());
-			return orderRepo.save(order);
-		} catch (Exception e) {
-			throw new Exception();
-		}
+	public Order createOrder(String user, double total) {
+		Order order = new Order();
+		order.setUser(user);
+		order.setTotal(total);
+		order.setStatus(OrderStatusEnum.PENDING.getStatus());
+		return orderRepo.save(order);
 	}
 
 	public OrderStatusEnum approveOrder(Long orderId) {
 		Optional<Order> orderOptional = orderRepo.findById(orderId);
-		Optional<OrderStatusEnum> statusOptional = orderOptional.map( order -> {
+		Optional<OrderStatusEnum> statusOptional = orderOptional.map(order -> {
 			order.setStatus(OrderStatusEnum.APPROVED.getStatus());
-			orderRepo.saveAndFlush(order);			
+			orderRepo.saveAndFlush(order);
 			return OrderStatusEnum.APPROVED;
 		});
-		
+
 		return statusOptional.orElse(OrderStatusEnum.NOT_FOUND);
-		
+
 	}
 
 	public OrderStatusEnum rejectOrder(Long orderId) {
@@ -46,10 +42,10 @@ public class OrderService {
 			orderRepo.saveAndFlush(order);
 			return OrderStatusEnum.REJECTED;
 		});
-		
+
 		return statusOptional.orElse(OrderStatusEnum.NOT_FOUND);
 	}
-	
+
 	public void deleteOrder(Long id) {
 		orderRepo.deleteById(id);
 	}
