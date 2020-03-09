@@ -15,12 +15,16 @@ public class OrderService {
 	@Autowired
 	private OrderRepository orderRepo;
 
-	public Order createOrder(String user, double total) {
-		Order order = new Order();
-		order.setUser(user);
-		order.setTotal(total);
-		order.setStatus(OrderStatusEnum.PENDING.getStatus());
-		return orderRepo.save(order);
+	public Order createOrder(String user, double total) throws Exception {
+		try {
+			Order order = new Order();
+			order.setUser(user);
+			order.setTotal(total);
+			order.setStatus(OrderStatusEnum.PENDING.getStatus());
+			return orderRepo.save(order);
+		} catch (Exception e) {
+			throw new Exception();
+		}
 	}
 
 	public OrderStatusEnum approveOrder(Long orderId) {

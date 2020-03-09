@@ -19,27 +19,31 @@ import com.rogerio.saga.choreography.OrderService.services.OrderService;
 
 @Service
 public class OrderListener {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(OrderListener.class);
-	
+
 	@Value("${app.topic.order-response}")
 	private String topic;
-	
+
 	@Autowired
 	OrderService orderService;
-	
+
 	@Autowired
 	KafkaTemplate<String, CreateOrderResponse> kafkaTemplate;
-	
-	@KafkaListener(topics = "${app.topic.order-request}", groupId = "CreateOrderRequestGroup", containerFactory="orderKafkaListenerFactory")
-	public void createOrder(
-			@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition, 
-		    @Header(KafkaHeaders.OFFSET) String offset,
-			CreateOrderRequest req) {
-		logger.info("Partition {}, offset {}",partition,offset);
-		logger.info("Request: {}",req);
-		Order order = orderService.createOrder(req.getUser(), req.getTotal());	
-		kafkaTemplate.send(topic, new CreateOrderResponse(order));
-		logger.info("Finishing");
+
+	@KafkaListener(topics = "${app.topic.order-request}", groupId = "CreateOrderRequestGroup", containerFactory = "orderKafkaListenerFactory")
+	public void createOrder(@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+			@Header(KafkaHeaders.OFFSET) String offset, CreateOrderRequest req) {
+		logger.info("Started Consuming!");
+		logger.info("Partition {}, offset {}", partition, offset);
+		logger.info("Request: {}", req);
+		try {
+			Order order = orderService.createOrder(req.getUser(), req.getTotal());
+			kafkaTemplate.send(topic, new CreateOrderResponse(order));
+		} catch (Exception e) {
+			logger.error("Error creating the order:" + e.getMessage());
+		}
+		
+		logger.info("Finishing Consuming!");
 	}
 }
