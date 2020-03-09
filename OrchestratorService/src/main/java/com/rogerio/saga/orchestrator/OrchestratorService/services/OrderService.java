@@ -42,8 +42,9 @@ public class OrderService {
 
 			@Override
 			public void onSuccess(SendResult<String, CreateOrderRequest> result) {
-				System.out.println("Sent message=[" + createOrderRequest + 
-			              "] with offset=[" + result.getRecordMetadata().offset() + "]");
+				System.out.println("Sent message=[" + createOrderRequest + "], " 
+						+"Partition sent: ["+result.getRecordMetadata().partition() + "]"
+			              +", with offset=[" + result.getRecordMetadata().offset() + "]");
 				
 			}
 

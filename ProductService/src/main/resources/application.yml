@@ -2,4 +2,13 @@ spring:
   application:
     name: Product-Service
   cloud:    config:      uri: http://CONFIGURATION-SERVER
- 
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: a
+    password: a
+  h2:
+    console:
+      enabled: true
+  jpa:
+    databasePlatform: org.hibernate.dialect.H2Dialect
