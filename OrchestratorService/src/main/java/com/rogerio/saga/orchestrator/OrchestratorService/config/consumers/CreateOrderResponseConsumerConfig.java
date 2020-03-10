@@ -1,8 +1,10 @@
 package com.rogerio.saga.orchestrator.OrchestratorService.config.consumers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +14,6 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import com.rogerio.saga.orchestrator.OrchestratorService.config.consumers.factory.ConsumerConfigFactory;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.response.order.CreateOrderResponse;
 
 
@@ -21,24 +22,31 @@ import com.rogerio.saga.orchestrator.OrchestratorService.models.response.order.C
 public class CreateOrderResponseConsumerConfig {
 	
 	@Value("${app.consumers.groupid.create-order-response}")
-	private String CREATE_ORDER_RESPONSE_GROUP;
-
-	@Autowired
-	ConsumerConfigFactory<String, CreateOrderResponse> factory;
+	private String createOrderResponseGroupId;
 	
-    @Bean
-    public DefaultKafkaConsumerFactory<String, CreateOrderResponse> orderConsumerFactory() {
-    	DefaultKafkaConsumerFactory<String, CreateOrderResponse> cf = factory.createDefaultConsumerFactory();
-    	cf.getConfigurationProperties().put(ConsumerConfig.GROUP_ID_CONFIG, CREATE_ORDER_RESPONSE_GROUP);
-    	cf.setKeyDeserializer(new StringDeserializer());
-    	cf.setValueDeserializer(new JsonDeserializer<>(CreateOrderResponse.class,false));
-    	return cf;
+	@Value("${kafka.server}")
+	private String kafkaServer;
+
+
+	
+	@Bean
+    public ConsumerFactory<String, CreateOrderResponse> createOrderConsumerFactory() {
+        Map<String, Object> config = new HashMap<>();
+
+        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, createOrderResponseGroupId);
+        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(),
+                new JsonDeserializer<>(CreateOrderResponse.class,false));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, CreateOrderResponse> CreateOrdenerResponseListenerFactory() {
-    	ConsumerFactory<String, CreateOrderResponse> cf = orderConsumerFactory();
-    	return factory.getListenerFactory(cf);
+    public ConcurrentKafkaListenerContainerFactory<String, CreateOrderResponse> createOrderResponseListenerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, CreateOrderResponse> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(createOrderConsumerFactory());
+        return factory;
     }
     
     
