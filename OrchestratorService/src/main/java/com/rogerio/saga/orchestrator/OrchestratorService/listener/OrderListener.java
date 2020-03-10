@@ -1,11 +1,11 @@
 package com.rogerio.saga.orchestrator.OrchestratorService.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import com.rogerio.saga.orchestrator.OrchestratorService.config.KafkaConfig;
 import com.rogerio.saga.orchestrator.OrchestratorService.enums.OrderStatusEnum;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.OrderDTO;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.customer.ReserveCreditRequest;
@@ -17,13 +17,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class OrderListener {
 	
-	@Value("${app.topic.reserve-credit-request}")
-	private String reserveCreditTopic;
+	@Autowired
+	KafkaConfig kafkaConfig;
 	
 	@Autowired
 	KafkaTemplate<String, ReserveCreditRequest> kafkaTemplate;
 
-	@KafkaListener(topics = "${app.topic.order-response}", groupId = "CreateOrderResponseGroup", containerFactory = "createOrderResponseListenerFactory")
+	@KafkaListener(topics = "#{kafkaConfig.createOrderResponseTopic}", groupId = "CreateOrderResponseGroup", containerFactory = "createOrderResponseListenerFactory")
 	public void orderCreatedResponseListener(CreateOrderResponse response) {
 		log.info("Receiving response from OrderService producer. Response: {}", response);
 		OrderDTO order = response.getOrderDTO();
@@ -33,7 +33,7 @@ public class OrderListener {
 		
 		switch(status) {
 			case PENDING:		
-				kafkaTemplate.send(reserveCreditTopic, reserveCreditRequest);				
+				kafkaTemplate.send(kafkaConfig.getReserveCreditTopic(), reserveCreditRequest);				
 			default:
 				// TODO: handdle when we don't get the PENDING status!
 		}

@@ -32,10 +32,9 @@ public class OrderResource {
 
 	@PostMapping("/create")
 	public ResponseEntity<CreateOrderResponse> createPendingOrder(@RequestBody CreateOrderRequest req) {	
-		//Order order = orderService.createOrder(req.getUser(), req.getTotal());
-		//CreateOrderResponse response = new CreateOrderResponse(order);
-		//return new ResponseEntity<>(response, HttpStatus.OK);
-		return null;
+		Order order = orderService.createOrder(req.getUser(), req.getTotal());
+		CreateOrderResponse response = new CreateOrderResponse(order);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@PutMapping("/approve")

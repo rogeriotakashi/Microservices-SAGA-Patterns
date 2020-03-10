@@ -5,7 +5,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.rogerio.saga.orchestrator.OrchestratorService.config.kafkaConfig;
+import com.rogerio.saga.orchestrator.OrchestratorService.config.KafkaConfig;
 import com.rogerio.saga.orchestrator.OrchestratorService.enums.ReserveStatusEnum;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.response.customer.ReserveCreditResponse;
 
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ReserveCreditListener {
 
 	@Autowired
-	kafkaConfig kafkaConfig;
+	KafkaConfig kafkaConfig;
 	
 	@Autowired
 	private KafkaTemplate<String, Long> kafkaTemplate;
