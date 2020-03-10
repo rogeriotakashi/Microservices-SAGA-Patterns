@@ -68,17 +68,6 @@ public class OrchestratorResource {
 		}
 	}
 
-	private Function<Long, OrderStatusEnum> getNextOrderActionByReserveStatus(ReserveStatusEnum reserveStatus) {
-		switch (reserveStatus) {
-		case RESERVED:
-			return (T) -> orderService.approveOrder(T);
-		case INSUFICIENT_CREDIT:
-			return (T) -> orderService.rejectOrder(T);
-		case CUSTOMER_NOT_FOUND:
-			return (T) -> orderService.deleteOrder(T);
-		}
-
-		return null;
-	}
+	
 
 }

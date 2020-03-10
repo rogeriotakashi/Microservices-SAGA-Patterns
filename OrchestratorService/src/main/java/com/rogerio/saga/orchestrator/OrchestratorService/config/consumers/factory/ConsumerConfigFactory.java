@@ -7,6 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
@@ -23,16 +24,18 @@ import com.rogerio.saga.orchestrator.OrchestratorService.models.response.order.C
 @Component
 public class ConsumerConfigFactory<K,V> {
 	
+	@Value("${kafka.server}")
+	private String KAFKA_SERVER;
+	
 	/**
-	 * Default implementation for ProducerFactory
-	 * @return ProducerFactory<E,V>
+	 * Default implementation for ConsumerFactory
+	 * @return DefaultKafkaConsumerFactory<K,V>
 	 */
 	public DefaultKafkaConsumerFactory<K, V> createDefaultConsumerFactory(){
 		Map<String, Object> config = new HashMap<>();
 
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "CreateOrderResponseGroup");
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KAFKA_SERVER);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
 
@@ -40,8 +43,8 @@ public class ConsumerConfigFactory<K,V> {
 	}
 	
 	/**
-	 * Default implementation for Listener Factory
-	 * @return KafkaTemplate<E,V>
+	 * Default implementation for Listener Container Factory
+	 * @return ConcurrentKafkaListenerContainerFactory<K,V>
 	 */
 	public ConcurrentKafkaListenerContainerFactory<K,V> getListenerFactory(ConsumerFactory<K,V> cf) {
         ConcurrentKafkaListenerContainerFactory<K, V> factory = new ConcurrentKafkaListenerContainerFactory<>();

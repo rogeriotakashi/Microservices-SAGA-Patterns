@@ -1,7 +1,9 @@
 package com.rogerio.saga.orchestrator.OrchestratorService.config.consumers;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -17,6 +19,9 @@ import com.rogerio.saga.orchestrator.OrchestratorService.models.response.order.C
 @Configuration
 @EnableKafka
 public class CreateOrderResponseConsumerConfig {
+	
+	@Value("${app.consumers.groupid.create-order-response}")
+	private String CREATE_ORDER_RESPONSE_GROUP;
 
 	@Autowired
 	ConsumerConfigFactory<String, CreateOrderResponse> factory;
@@ -24,6 +29,7 @@ public class CreateOrderResponseConsumerConfig {
     @Bean
     public DefaultKafkaConsumerFactory<String, CreateOrderResponse> orderConsumerFactory() {
     	DefaultKafkaConsumerFactory<String, CreateOrderResponse> cf = factory.createDefaultConsumerFactory();
+    	cf.getConfigurationProperties().put(ConsumerConfig.GROUP_ID_CONFIG, CREATE_ORDER_RESPONSE_GROUP);
     	cf.setKeyDeserializer(new StringDeserializer());
     	cf.setValueDeserializer(new JsonDeserializer<>(CreateOrderResponse.class,false));
     	return cf;
