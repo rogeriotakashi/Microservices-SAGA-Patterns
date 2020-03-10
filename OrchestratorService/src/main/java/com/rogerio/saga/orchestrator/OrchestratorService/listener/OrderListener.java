@@ -23,7 +23,7 @@ public class OrderListener {
 	@Autowired
 	KafkaTemplate<String, ReserveCreditRequest> kafkaTemplate;
 
-	@KafkaListener(topics = "${app.topic.order-response}", groupId = "CreateOrderResponseGroup", containerFactory = "orderKafkaListenerFactory")
+	@KafkaListener(topics = "${app.topic.order-response}", groupId = "CreateOrderResponseGroup", containerFactory = "CreateOrdenerResponseListenerFactory")
 	public void orderCreatedResponseListener(CreateOrderResponse response) {
 		log.info("Receiving response from OrderService producer. Response: {}", response);
 		OrderDTO order = response.getOrderDTO();

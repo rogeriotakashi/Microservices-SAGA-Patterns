@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class ProducerConfigFactory<E,V> {
+public class ProducerConfigFactory<K,V> {
 	
 	/**
 	 * Default implementation for ProducerFactory
 	 * @return ProducerFactory<E,V>
 	 */
-	public ProducerFactory<E, V> createDefaultProducerFactory(){
+	public ProducerFactory<K, V> createDefaultProducerFactory(){
 		Map<String, Object> config = new HashMap<>();
 
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -33,7 +33,7 @@ public class ProducerConfigFactory<E,V> {
 	 * Default implementation for KafkaTemplate
 	 * @return KafkaTemplate<E,V>
 	 */
-	public KafkaTemplate<E, V> createDefaultkafkaTemplate() {
+	public KafkaTemplate<K, V> createDefaultkafkaTemplate() {
         return new KafkaTemplate<>(createDefaultProducerFactory());
     }
 	

@@ -19,30 +19,9 @@ import com.rogerio.saga.orchestrator.OrchestratorService.models.response.order.C
 
 @Configuration
 @EnableKafka
-public class KafkaConsumerConfig {
+public class ReserveCreditRequestConsumerConfig {
 
-    @Bean
-    public ConsumerFactory<String, CreateOrderResponse> orderConsumerFactory() {
-        Map<String, Object> config = new HashMap<>();
-
-        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "CreateOrderResponseGroup");
-        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(),
-                new JsonDeserializer<>(CreateOrderResponse.class,false));
-    }
-
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, CreateOrderResponse> orderKafkaListenerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, CreateOrderResponse> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(orderConsumerFactory());
-        return factory;
-    }
-    
-    
-    @Bean
+	@Bean
     public ConsumerFactory<String, ReserveCreditResponse> reserveCreditResponseConsumerFactory() {
         Map<String, Object> config = new HashMap<>();
 
