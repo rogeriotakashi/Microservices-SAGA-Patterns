@@ -5,4 +5,5 @@ CREATE TABLE Orders (
   user VARCHAR(200) NOT NULL,
   status INT NOT NULL,
   total DOUBLE NOT NULL
+  
 );

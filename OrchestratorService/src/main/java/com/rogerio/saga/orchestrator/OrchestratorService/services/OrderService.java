@@ -30,6 +30,7 @@ public class OrderService {
 	
 	@Value("${app.topic.order-request}")
 	private String topic;
+
 	
 	@Autowired
 	RestTemplate rest;
@@ -41,53 +42,6 @@ public class OrderService {
 		log.info("Entering createOrder method. user {}, total {}", user, total);
 		CreateOrderRequest createOrderRequest = new CreateOrderRequest(user, total);
 		log.info("Created CreateOrderRequest. Sending to streaming plataform");
-		ListenableFuture<SendResult<String,CreateOrderRequest>> future = kafkaTemplate.send(topic, createOrderRequest);
-		future.addCallback(new ListenableFutureCallback<SendResult<String, CreateOrderRequest>>() {
-			@Override
-			public void onSuccess(SendResult<String, CreateOrderRequest> result) {
-				log.info("Request sent: {}, Partition sent: {}, with offset: {}", 
-						createOrderRequest,
-						result.getRecordMetadata().partition(),
-						result.getRecordMetadata().offset());	
-			}
-
-			@Override
-			public void onFailure(Throwable ex) {
-				log.error("Unable to send message: {} due to: {}", createOrderRequest, ex.getMessage());
-			}
-		});
+		kafkaTemplate.send(topic,createOrderRequest);
 	}
-	
-	public OrderStatusEnum approveOrder(Long orderId) {
-		ApproveOrderRequest approveOrderRequest = new ApproveOrderRequest(orderId);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<ApproveOrderRequest> request = new HttpEntity<>(approveOrderRequest, headers);
-		
-		ResponseEntity<ApproveOrderResponse> approveOrderResponse = rest.exchange(
-				"http://ORDER-SERVICE/api/v1/order/approve", 
-				HttpMethod.PUT,
-				request,
-				ApproveOrderResponse.class);
-		
-		return approveOrderResponse.getBody().getStatus();
-	}
-	
-	public OrderStatusEnum rejectOrder(Long orderId) {
-		RejectOrderRequest rejectOrderRequest = new RejectOrderRequest(orderId);
-		RejectOrderResponse response = rest.postForObject("http://ORDER-SERVICE/api/v1/order/reject", rejectOrderRequest , RejectOrderResponse.class);
-		return response.getStatus();
-	}
-	
-	public OrderStatusEnum deleteOrder(Long orderId) {
-		rest.delete("http://ORDER-SERVICE/api/v1/order/delete/" + orderId);
-		return OrderStatusEnum.DELETED;
-	}
-
-	public void updateOrderStatus(Long orderId, OrderStatusEnum status) {
-		UpdateOrderStatusRequest updateOrderStatusRequest = new UpdateOrderStatusRequest(orderId, status);		
-		rest.put("http://ORDER-SERVICE/api/v1/order/update",updateOrderStatusRequest);
-		
-	}
-
 }

@@ -1,4 +1,4 @@
-package com.rogerio.saga.choreography.OrderService.config;
+package com.rogerio.saga.choreography.OrderService.config.consumers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,7 @@ import com.rogerio.saga.choreography.OrderService.models.requests.CreateOrderReq
 
 @Configuration
 @EnableKafka
-public class KafkaConsumerConfig {
+public class CreateOrderRequestConsumerConfig {
 
 
     @Bean

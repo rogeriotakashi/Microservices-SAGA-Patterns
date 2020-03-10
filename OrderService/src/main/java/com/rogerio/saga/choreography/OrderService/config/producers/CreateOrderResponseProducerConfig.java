@@ -1,4 +1,4 @@
-package com.rogerio.saga.choreography.OrderService.config;
+package com.rogerio.saga.choreography.OrderService.config.producers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import com.rogerio.saga.choreography.OrderService.models.response.CreateOrderResponse;
 
 @Configuration
-public class KafkaProducerConfig {
+public class CreateOrderResponseProducerConfig {
 	
 	@Bean
     public ProducerFactory<String, CreateOrderResponse> producerFactory() {

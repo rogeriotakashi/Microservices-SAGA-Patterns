@@ -29,7 +29,7 @@ public class CustomerResource {
 	@PostMapping("/reserve-credit")
 	public HttpEntity<ReserveCreditResponse> reserveCredit(@RequestBody ReserveCreditRequest req) {
 		ReserveStatusEnum status = customerService.reserveCredit(req.getUser(), req.getTotal());
-		ReserveCreditResponse response = new ReserveCreditResponse(status);
+		ReserveCreditResponse response = new ReserveCreditResponse(req.getOrderId(), status);
 		return new ResponseEntity<>(response, HttpStatus.OK);	
 	}
 }

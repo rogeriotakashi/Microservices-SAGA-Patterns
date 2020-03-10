@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReserveCreditResponse {
 	
+	private Long orderId;
 	private ReserveStatusEnum status;
 
-	public ReserveCreditResponse(ReserveStatusEnum status) {
+	public ReserveCreditResponse(Long orderId,ReserveStatusEnum status) {
+		this.orderId = orderId;
 		this.status = status;
 	}
 	

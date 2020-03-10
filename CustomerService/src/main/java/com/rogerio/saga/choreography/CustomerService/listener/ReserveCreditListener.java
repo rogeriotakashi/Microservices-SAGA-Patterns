@@ -30,6 +30,6 @@ public class ReserveCreditListener {
 	public void reserveCreditRequestListener(ReserveCreditRequest request) {
 		log.info("Entering ReserveCrediRequest consumer. Request: {}", request);
 		ReserveStatusEnum status = customerService.reserveCredit(request.getUser(), request.getTotal());
-		kafkaTemplate.send(reserveCreditResponseTopic, new ReserveCreditResponse(status));
+		kafkaTemplate.send(reserveCreditResponseTopic, new ReserveCreditResponse(request.getOrderId(), status));
 	}
 }

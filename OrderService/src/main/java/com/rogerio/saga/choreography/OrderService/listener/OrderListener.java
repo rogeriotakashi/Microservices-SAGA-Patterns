@@ -6,6 +6,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import com.rogerio.saga.choreography.OrderService.enums.OrderStatusEnum;
 import com.rogerio.saga.choreography.OrderService.models.Order;
 import com.rogerio.saga.choreography.OrderService.models.requests.CreateOrderRequest;
 import com.rogerio.saga.choreography.OrderService.models.response.CreateOrderResponse;
@@ -17,8 +18,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class OrderListener {
 
+	@Value("${app.topic.order-request}")
+	private String createOrderRequestTopic;
+	
 	@Value("${app.topic.order-response}")
-	private String topic;
+	private String createOrderResponseTopic;
+	
+	@Value("${app.topic.approve-order-request}")
+	private String approveOrderResponseTopic;
+	
 
 	@Autowired
 	OrderService orderService;
@@ -32,6 +40,18 @@ public class OrderListener {
 		Order order = orderService.createOrder(req.getUser(), req.getTotal());
 		
 		log.info("Order created {}. Sending CreateOrderResponse to streaming plataform", order);
-		kafkaTemplate.send(topic, new CreateOrderResponse(order));
+		kafkaTemplate.send(createOrderResponseTopic, new CreateOrderResponse(order));
+	}
+	
+	@KafkaListener(topics = "${app.topic.approve-order-request}", groupId = "ApproveOrderRequestGroup", containerFactory = "approveOrderListenerFactory")
+	public void approveOrder(Long orderId) {
+		log.info("Entering approveOrder Consumer. Order approved: {}", orderId);
+		OrderStatusEnum status = orderService.approveOrder(orderId);
+		
+		switch(status) {
+		case APPROVED:
+			log.info("Order status {}. Sending Order ID: {} with approved status to streaming plataform", status, orderId);
+			//kafkaTemplate.send(topic, new CreateOrderResponse(order));	
+		}
 	}
 }

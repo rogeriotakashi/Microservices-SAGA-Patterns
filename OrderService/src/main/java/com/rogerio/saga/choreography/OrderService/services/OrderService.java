@@ -9,13 +9,17 @@ import com.rogerio.saga.choreography.OrderService.enums.OrderStatusEnum;
 import com.rogerio.saga.choreography.OrderService.models.Order;
 import com.rogerio.saga.choreography.OrderService.repositories.OrderRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class OrderService {
 
 	@Autowired
 	private OrderRepository orderRepo;
 
 	public Order createOrder(String user, double total) {
+		log.info("Entering createorder user. Creating the Order register with status PENDING");
 		Order order = new Order();
 		order.setUser(user);
 		order.setTotal(total);
@@ -24,6 +28,7 @@ public class OrderService {
 	}
 
 	public OrderStatusEnum approveOrder(Long orderId) {
+		log.info("Entering approveOrder method. Approving Order ID: {}", orderId);
 		Optional<Order> orderOptional = orderRepo.findById(orderId);
 		Optional<OrderStatusEnum> statusOptional = orderOptional.map(order -> {
 			order.setStatus(OrderStatusEnum.APPROVED.getStatus());
@@ -31,6 +36,7 @@ public class OrderService {
 			return OrderStatusEnum.APPROVED;
 		});
 
+		log.warn("Order ID: {} not found: {} . Returning status NOT_FOUND", orderId);
 		return statusOptional.orElse(OrderStatusEnum.NOT_FOUND);
 
 	}
