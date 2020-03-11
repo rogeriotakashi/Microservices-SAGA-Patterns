@@ -1,7 +1,9 @@
 package com.rogerio.saga.orchestrator.OrchestratorService.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 
 import lombok.Getter;
 
@@ -34,7 +36,10 @@ public class KafkaConfig {
 	protected String processOrderResponseTopic;
 	
 	
-
+	@Bean
+	public StringJsonMessageConverter converter() {
+		return new StringJsonMessageConverter();
+	}
 	
 	
 }

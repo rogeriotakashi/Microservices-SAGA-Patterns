@@ -21,7 +21,7 @@ public class ReserveCreditListener {
 	@Autowired
 	private KafkaTemplate<String, Long> kafkaTemplate;
 
-	@KafkaListener(topics = "#{kafkaConfig.reserveCreditResponseTopic}", groupId = "ReserveCreditResponseGroup", containerFactory = "reserveCreditResponseListenerFactory")
+	@KafkaListener(topics = "#{kafkaConfig.reserveCreditResponseTopic}", groupId = "ReserveCreditResponseGroup")
 	public void reserveCreditResponseListener(ReserveCreditResponse response) {
 		log.info("Receiving response from CustomerService producer. Response: {} ", response);
 		ReserveStatusEnum status = response.getStatus();

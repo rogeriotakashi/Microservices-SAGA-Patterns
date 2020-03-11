@@ -2,6 +2,7 @@ spring:
   application:
     name: Orchestrator-Service
   cloud:    config:      uri: http://CONFIGURATION-SERVICE
+        kafka:    producer:      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer        
       
 
   
