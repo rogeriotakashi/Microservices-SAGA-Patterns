@@ -28,7 +28,7 @@ public class ReserveCreditListener {
 
 		switch (status) {		
 		case RESERVED:
-			kafkaTemplate.send(kafkaConfig.getApproveOrderTopic(), response.getOrderId());
+			kafkaTemplate.send(kafkaConfig.getApproveOrderRequestTopic(), response.getOrderId());
 			break;
 		case INSUFICIENT_CREDIT:
 		case CUSTOMER_NOT_FOUND:

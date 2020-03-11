@@ -16,13 +16,22 @@ public class KafkaConfig {
 	protected String createOrderResponseTopic;
 	
 	@Value("${app.topic.reserve-credit-request}")
-	protected String reserveCreditTopic;
+	protected String reserveCreditRequestTopic;
 	
 	@Value("${app.topic.reserve-credit-response}")
 	protected String reserveCreditResponseTopic;
 
 	@Value("${app.topic.approve-order-request}")
-	protected String approveOrderTopic;
+	protected String approveOrderRequestTopic;
+	
+	@Value("${app.topic.approve-order-response}")
+	protected String approveOrderResponseTopic;
+	
+	@Value("${app.topic.process-order-request}")
+	protected String processOrderRequestTopic;
+	
+	@Value("${app.topic.process-order-response}")
+	protected String processOrderResponseTopic;
 	
 	
 

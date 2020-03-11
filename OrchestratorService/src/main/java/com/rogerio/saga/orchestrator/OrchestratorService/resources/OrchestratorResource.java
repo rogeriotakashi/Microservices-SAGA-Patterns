@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rogerio.saga.orchestrator.OrchestratorService.models.OrderDTO;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.OrderRequest;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.response.product.CalculateTotalResponse;
+import com.rogerio.saga.orchestrator.OrchestratorService.services.CustomerService;
 import com.rogerio.saga.orchestrator.OrchestratorService.services.OrderService;
 import com.rogerio.saga.orchestrator.OrchestratorService.services.ProductService;
+import com.rogerio.saga.orchestrator.OrchestratorService.services.StockService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +28,12 @@ public class OrchestratorResource {
 
 	@Autowired
 	OrderService orderService;
+	
+	@Autowired
+	CustomerService customerService;
+	
+	@Autowired
+	StockService stockService;
 
 
 	@PostMapping("/order")
@@ -32,12 +41,13 @@ public class OrchestratorResource {
 		log.info("Entering /order endpoint. OrderRequest: {}", req);
 
 		try {
-			CalculateTotalResponse total = productService.calculateTotal(req.getProducts());
-			orderService.createOrder(req.getUser(), total.getTotal());
+			// Sync calls using REST calls
+			CalculateTotalResponse totalResponse = productService.calculateTotal(req.getProducts());
+			OrderDTO order = orderService.createOrder(req.getUser(), totalResponse.getTotal());
 
-			// Update Order status after stock process
-			//	orderService.updateOrderStatus(orderDTO.getId(), orderStatusAfterProcess);
-			//}
+			// Async calls using Kafka
+			customerService.reserveCredit(order.getId(), req.getUser(), totalResponse.getTotal());
+			stockService.processOrder(order.getId(), req.getProducts());
 	
 			return new ResponseEntity<>(HttpStatus.OK);
 			
