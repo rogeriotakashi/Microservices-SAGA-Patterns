@@ -1,5 +1,10 @@
 # Description
-Practical implementation of microservice patterns, using a generic business case (Order).
+Practical implementation of microservice SAGA pattern, using a generic product order business case.
+This is my first project using microservice architecture and all the code will improved as times go by. 
+
+
+# Project Diagram
+![Alt Text](https://github.com/rogeriotakashi/Microservices-SAGA-Patterns/blob/88dbb6ba9fb37a29d688b63636c460d6096074d6/Microservice-SAGA-Patterns-diagram.jpg)
 
 # Tecnologies
 - Java 8 (Streams, Optional, Stream API, ...)
