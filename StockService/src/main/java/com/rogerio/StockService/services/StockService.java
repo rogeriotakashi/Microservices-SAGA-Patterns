@@ -20,7 +20,7 @@ public class StockService {
 	
 	
 	
-	public ProcessStatusEnum processOrder(List<ProductOrdered> productsOrdered) throws ProductStockNotAvailibleException{
+	public ProcessStatusEnum processOrder(List<ProductOrdered> productsOrdered){
 		boolean isAllProductsAvalible = productsOrdered.stream()
 		.anyMatch(productOrdered -> productOrdered.getQuantity() > 0);
 		

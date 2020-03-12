@@ -32,10 +32,11 @@ public class KafkaConfig {
 	@Value("${app.topic.process-order-request}")
 	protected String processOrderRequestTopic;
 	
-	@Value("${app.topic.process-order-response}")
-	protected String processOrderResponseTopic;
+	@Value("${app.topic.response-validator}")
+	protected String responseValidatorTopic;	
 	
 	
+	/* This bean is necessary to convert the  Message (Json) to String for StringDeserialization on @KafkaListener (Consumer)*/
 	@Bean
 	public StringJsonMessageConverter converter() {
 		return new StringJsonMessageConverter();
