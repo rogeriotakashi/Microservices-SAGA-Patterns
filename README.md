@@ -11,20 +11,32 @@ This is my first project using microservice architecture and all the code will i
 - Springboot 
 - Spring Cloud (Eureka, Config, Sleuth, ...)
 - Swagger2 (All documentation centralized in DocumentationService)
-- Kafka
+- Kafka (Using KafkaAutoConfiguration)
 - H2Db (Temporarilly using in-memory DB)
-- Lombok 
-- Maven
+- Lombok (Reduce code from models and entities)
+- Logging (Using @Slf4j from Lombok)
+- Maven 
+
+# To be implemented Soon
+- ResponseValidatorListener (Kafka Consumer)
+- Compensation Functions
+- Docker images and Docker-Composer (Docker images for each service and create docker-composer for Apache Zookeper and Kafka containerization)
 
 # To be implemented
-- Compensation Functions
 - Spring Zuul
 - JWT and OAuth2
 - Spring Feign
 - Spring Security
-- Logging
-- Docker images and Docker-Composer
+- Feature Toggle using dynamic config refresh
+- Code Optimizations
+- Unit Tests for all services
 
+# Other projects and future goals
+- Develop an frontend project for this project (Possibly using Angular)
+- Understand Kubernates and apply to this project
+- Understand Kafka (Deep knowledge about partitions, offsets, brokers...)
+- Deploy this project to cloud
+- Apply management and metrics tools 
 
 # Running Locally
 After clonning the repository, you will need:
