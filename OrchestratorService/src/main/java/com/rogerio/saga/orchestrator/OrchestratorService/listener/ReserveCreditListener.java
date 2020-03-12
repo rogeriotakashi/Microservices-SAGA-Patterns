@@ -1,13 +1,18 @@
 package com.rogerio.saga.orchestrator.OrchestratorService.listener;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rogerio.saga.orchestrator.OrchestratorService.config.KafkaConfig;
-import com.rogerio.saga.orchestrator.OrchestratorService.enums.ReserveStatusEnum;
-import com.rogerio.saga.orchestrator.OrchestratorService.models.response.customer.ReserveCreditResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,25 +26,20 @@ public class ReserveCreditListener {
 	@Autowired
 	private KafkaTemplate<String, Long> kafkaTemplate;
 
-	@KafkaListener(topics = "#{kafkaConfig.reserveCreditResponseTopic}", groupId = "ReserveCreditResponseGroup")
-	public void reserveCreditResponseListener(ReserveCreditResponse response) {
-		log.info("Receiving response from CustomerService producer. Response: {} ", response);
-		ReserveStatusEnum status = response.getStatus();
-
-		switch (status) {		
-		case RESERVED:
-			kafkaTemplate.send(kafkaConfig.getApproveOrderRequestTopic(), response.getOrderId());
-			break;
-		case INSUFICIENT_CREDIT:
-		case CUSTOMER_NOT_FOUND:
-			/*
-			 * TODO: Implement a producer to send a message to cancel the order and execution of compensation functions 
-			 * CancelOrderRequest CancelOrderRequest = new CancelOrderRequest(); 
-			 * kafkaTemplate.send("CancelOrderRequestTopic",CancelOrderRequest);
-			 */
-			break;
+	@KafkaListener(topics = "#{kafkaConfig.responseValidatorTopic}", groupId = "ResponseValidatorGroup")
+	public void responseValidatorListener(ConsumerRecord<String, String> record) {
+		log.info("Entering Response Validator Listener for record "+ record.value());
+		try {
+			HashMap<String,Object> result = new ObjectMapper().readValue(record.value(), HashMap.class);
+			log.info(result.get("orderId").toString());
+			log.info(result.get("status").toString());
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
 	}
 
 }

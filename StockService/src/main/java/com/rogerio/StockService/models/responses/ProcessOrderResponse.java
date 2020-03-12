@@ -1,10 +1,12 @@
 package com.rogerio.StockService.models.responses;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.rogerio.StockService.enums.ProcessStatusEnum;
 
 import lombok.Data;
 
 @Data
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "class")
 public class ProcessOrderResponse {
 	
 	private Long orderId;

@@ -11,11 +11,11 @@ import lombok.Getter;
 @Getter
 public class KafkaConfig {
 	
-	@Value("${app.topic.reserve-credit-response}")
-	private String reserveCreditResponseTopic;
-	
 	@Value("${app.topic.reserve-credit-request}")
 	private String reserveCreditRequestTopic;
+	
+	@Value("${app.topic.response-validator}")
+	private String responseValidatorTopic;
 
 	
 	/* This bean is necessary to convert the  Message (Json) to String for StringDeserialization on @KafkaListener (Consumer)*/
