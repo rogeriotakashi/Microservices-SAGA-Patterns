@@ -1,6 +1,6 @@
 # Description
 Practical implementation of microservice SAGA pattern, using a generic product order business case.
-This is my first project using microservice architecture and all the code will improved as times go by. 
+This is my first project using microservice architecture and all the code will improve as times go by. 
 
 
 # Project Diagram
