@@ -33,12 +33,11 @@ public class ReserveCreditListener {
 			HashMap<String,Object> result = new ObjectMapper().readValue(record.value(), HashMap.class);
 			log.info(result.get("orderId").toString());
 			log.info(result.get("status").toString());
+			
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO: Add logs
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO: Add logs
 		}
 	}
 

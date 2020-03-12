@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS OrderServiceStatus;
+
+CREATE TABLE OrderServiceStatus (
+  id INT AUTO_INCREMENT  PRIMARY KEY,
+  orderId INT NOT NULL,
+  serviceName VARCHAR(200) NOT NULL,
+  status VARCHAR(50) NOT NULL
+);
+

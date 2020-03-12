@@ -2,7 +2,16 @@ spring:
   application:
     name: Orchestrator-Service
   cloud:    config:      uri: http://CONFIGURATION-SERVICE
-        kafka:    producer:      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer        
+        kafka:    producer:      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: a
+    password: a
+  h2:
+    console:
+      enabled: true
+  jpa:
+    databasePlatform: org.hibernate.dialect.H2Dialect
       
 
   
