@@ -30,6 +30,8 @@ public class ReserveCreditListener {
 	
 	@Autowired
 	KafkaTemplate<String, ValidatorResponse> kafkaTemplate;
+	
+	private static final String SERVICE_NAME = "reserveCredit";
 
 	@KafkaListener(topics = "#{kafkaConfig.reserveCreditRequestTopic}" , groupId = "ReserveCreditRequestGroup")
 	public void reserveCreditRequestListener(ReserveCreditRequest request) {
@@ -37,9 +39,9 @@ public class ReserveCreditListener {
 		ReserveStatusEnum status = customerService.reserveCredit(request.getUser(), request.getTotal());
 		
 		EnumMap<ReserveStatusEnum, Supplier<ValidatorResponse>> map = new EnumMap<>(ReserveStatusEnum.class);
-		map.put(ReserveStatusEnum.RESERVED, () -> new ValidatorResponse(request.getOrderId(), ValidatorEnum.OK, "reserveCredit"));
-		map.put(ReserveStatusEnum.CUSTOMER_NOT_FOUND, () -> new ValidatorResponse(request.getOrderId(), ValidatorEnum.FAILED, "reserveCredit"));
-		map.put(ReserveStatusEnum.INSUFICIENT_CREDIT, () -> new ValidatorResponse(request.getOrderId(), ValidatorEnum.FAILED, "reserveCredit"));
+		map.put(ReserveStatusEnum.RESERVED, () -> new ValidatorResponse(request.getOrderId(), ValidatorEnum.OK, SERVICE_NAME));
+		map.put(ReserveStatusEnum.CUSTOMER_NOT_FOUND, () -> new ValidatorResponse(request.getOrderId(), ValidatorEnum.FAILED, SERVICE_NAME));
+		map.put(ReserveStatusEnum.INSUFICIENT_CREDIT, () -> new ValidatorResponse(request.getOrderId(), ValidatorEnum.FAILED, SERVICE_NAME));
 		
 		Supplier<ValidatorResponse> validator = map.get(status);
 

@@ -30,6 +30,8 @@ public class ProcessOrderRequestListener {
 	
 	@Autowired
 	KafkaTemplate<String, ValidatorResponse> kafkaTemplate;
+	
+	private static final String SERVICE_NAME = "processOrder";
 
 	@KafkaListener(topics = "#{kafkaConfig.processOrderRequestTopic}", groupId = "ProcessOrderRequestGroup" )
 	public void processOrderRequestListener(ProcessOrderRequest request) {
@@ -37,9 +39,9 @@ public class ProcessOrderRequestListener {
 		ProcessStatusEnum status = stockService.processOrder(request.getProductsOrdered());
 		
 		EnumMap<ProcessStatusEnum, Supplier<ValidatorResponse>> map = new EnumMap<>(ProcessStatusEnum.class);
-		map.put(ProcessStatusEnum.SUCCESS, () -> new ValidatorResponse(request.getOrderId(), ValidatorEnum.OK, "processOrder"));
-		map.put(ProcessStatusEnum.PRODUCT_NOT_FOUND, () -> new ValidatorResponse(request.getOrderId(), ValidatorEnum.FAILED, "processOrder"));
-		map.put(ProcessStatusEnum.PRODUCT_NOT_AVAILIBLE, () -> new ValidatorResponse(request.getOrderId(), ValidatorEnum.FAILED, "processOrder"));
+		map.put(ProcessStatusEnum.SUCCESS, () -> new ValidatorResponse(request.getOrderId(), ValidatorEnum.OK, SERVICE_NAME));
+		map.put(ProcessStatusEnum.PRODUCT_NOT_FOUND, () -> new ValidatorResponse(request.getOrderId(), ValidatorEnum.FAILED, SERVICE_NAME));
+		map.put(ProcessStatusEnum.PRODUCT_NOT_AVAILIBLE, () -> new ValidatorResponse(request.getOrderId(), ValidatorEnum.FAILED, SERVICE_NAME));
 
 		Supplier<ValidatorResponse> validator = map.get(status);
 		

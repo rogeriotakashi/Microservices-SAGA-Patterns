@@ -12,6 +12,11 @@ spring:
       enabled: true
   jpa:
     databasePlatform: org.hibernate.dialect.H2Dialect
+  kafka:    producer:      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+app:
+   scheduler:
+      send-pending-orders: 60000
 
   
         

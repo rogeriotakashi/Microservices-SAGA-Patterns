@@ -37,30 +37,6 @@ public class OrderResource {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PutMapping("/approve")
-	public ResponseEntity<ApproveOrderResponse> approveOrder(@RequestBody ApproveOrderRequest req) {	
-		OrderStatusEnum status = orderService.approveOrder(req.getId());
-		ApproveOrderResponse approveOrderResponse = new ApproveOrderResponse(req.getId(), status);
-		return new ResponseEntity<>(approveOrderResponse, HttpStatus.OK);
-	}
-
-	@PutMapping("/reject")
-	public ResponseEntity<RejectOrderResponse> rejectOrder(@RequestBody RejectOrderRequest req) {
-		OrderStatusEnum status = orderService.rejectOrder(req.getId());
-		RejectOrderResponse rejectOrderResponse = new RejectOrderResponse(req.getId(), status);
-		return new ResponseEntity<>(rejectOrderResponse, HttpStatus.OK);
-	}
 	
-	@PutMapping("/update")
-	public ResponseEntity<String> updateOrderStatus(@RequestBody UpdateOrderStatusRequest req) {
-		orderService.updateOrderStatus(req.getId(), req.getStatus());
-		return new ResponseEntity<>(HttpStatus.OK);
-	} 
-	
-	@DeleteMapping("/delete/{orderId}")
-	public ResponseEntity<String> rejectOrder(@PathVariable(value="orderId") Long id) {	
-		orderService.deleteOrder(id);
-		return new ResponseEntity<>(HttpStatus.OK);
-	} 
 	
 }

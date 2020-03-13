@@ -9,12 +9,6 @@ import lombok.Getter;
 @Getter
 public class KafkaConfig {
 
-	@Value("${app.topic.order-request}")
-	private String createOrderRequestTopic;
-	
-	@Value("${app.topic.order-response}")
-	private String createOrderResponseTopic;
-	
-	@Value("${app.topic.approve-order-request}")
-	private String approveOrderRequestTopic;
+	@Value("${app.topic.pending-orders}")
+	private String pendingOrdersTopic;
 }
