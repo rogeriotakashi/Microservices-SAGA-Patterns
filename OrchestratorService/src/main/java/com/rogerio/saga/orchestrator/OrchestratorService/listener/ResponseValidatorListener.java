@@ -3,7 +3,7 @@ package com.rogerio.saga.orchestrator.OrchestratorService.listener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 
 import com.rogerio.saga.orchestrator.OrchestratorService.config.KafkaConfig;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.response.ValidatorResponse;
@@ -11,9 +11,9 @@ import com.rogerio.saga.orchestrator.OrchestratorService.services.ValidatorServi
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service
+@Controller
 @Slf4j
-public class ResposnseValidatorListener {
+public class ResponseValidatorListener {
 
 	@Autowired
 	KafkaConfig kafkaConfig;
