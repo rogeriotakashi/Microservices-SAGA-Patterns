@@ -19,8 +19,8 @@ This is my first project using microservice architecture and all the code will i
 
 # Soon to be implemented
 - ResponseValidatorListener (Kafka Consumer)
--- Listener and table to store order services status - OK
--- Scheduller to verify status - On Going
+  - Listener and table to store order services status - OK
+  - Scheduller to verify status - On Going
 - Compensation Functions - will be developed after creating the kafka producers
 - Docker images and Docker-Composer (Docker images for each service and create docker-composer for Apache Zookeper and Kafka containerization)
 
