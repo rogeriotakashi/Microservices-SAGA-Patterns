@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity(name = "Order_Services_Status")
-public class OrderServicesStatus {
+public class OrderServiceStatus {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class OrderServicesStatus {
 	private String status;
 	private String serviceName;
 	
-	public OrderServicesStatus(Long orderId, ValidatorEnum status, String serviceName) {
+	public OrderServiceStatus(Long orderId, ValidatorEnum status, String serviceName) {
 		this.orderId = orderId;
 		this.status = status.toString();
 		this.serviceName = serviceName;

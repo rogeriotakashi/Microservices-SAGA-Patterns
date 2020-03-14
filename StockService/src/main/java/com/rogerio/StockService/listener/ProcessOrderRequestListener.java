@@ -6,19 +6,18 @@ import java.util.function.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 
 import com.rogerio.StockService.config.KafkaConfig;
 import com.rogerio.StockService.enums.ProcessStatusEnum;
 import com.rogerio.StockService.enums.ValidatorEnum;
 import com.rogerio.StockService.models.ValidatorResponse;
 import com.rogerio.StockService.models.requests.ProcessOrderRequest;
-import com.rogerio.StockService.models.responses.ProcessOrderResponse;
 import com.rogerio.StockService.services.StockService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service
+@Controller
 @Slf4j
 public class ProcessOrderRequestListener {
 	

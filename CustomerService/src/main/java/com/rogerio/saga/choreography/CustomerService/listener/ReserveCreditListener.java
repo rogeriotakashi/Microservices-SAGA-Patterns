@@ -1,13 +1,12 @@
 package com.rogerio.saga.choreography.CustomerService.listener;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 
 import com.rogerio.saga.choreography.CustomerService.config.KafkaConfig;
 import com.rogerio.saga.choreography.CustomerService.enums.ReserveStatusEnum;
@@ -18,7 +17,7 @@ import com.rogerio.saga.choreography.CustomerService.services.CustomerService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service
+@Controller
 @Slf4j
 public class ReserveCreditListener {
 	
