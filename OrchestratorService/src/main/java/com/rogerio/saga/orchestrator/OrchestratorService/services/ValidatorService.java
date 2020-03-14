@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.rogerio.saga.orchestrator.OrchestratorService.config.PendingOrderProperties;
+import com.rogerio.saga.orchestrator.OrchestratorService.config.KafkaConfig;
 import com.rogerio.saga.orchestrator.OrchestratorService.enums.ValidatorEnum;
-import com.rogerio.saga.orchestrator.OrchestratorService.models.OrderServiceStatus;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.ApproveValidatorDTO;
+import com.rogerio.saga.orchestrator.OrchestratorService.models.OrderServiceStatus;
 import com.rogerio.saga.orchestrator.OrchestratorService.repositories.OrderServicesStatusRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +24,10 @@ public class ValidatorService {
 	OrderServicesStatusRepository repo;
 	
 	@Autowired
-	PendingOrderProperties pendingOrderProperties;
+	KafkaTemplate<String, Long> kafkaTemplate;
 	
+	@Autowired
+	KafkaConfig kafkaConfig;
 
 	public void createOrderServiceStatus(Long orderId, ValidatorEnum status, String serviceName) {
 		OrderServiceStatus orderServiceStatus = new OrderServiceStatus(orderId, status, serviceName);
@@ -41,17 +44,14 @@ public class ValidatorService {
 			});
 		});
 		
-		// List of services to be verified from properties
-		List<String> serviceVerificationList = pendingOrderProperties.getServiceVerificationList();
-		
 		// For each Order
 		orderServicesStatusMap.forEach((orderId, orderServicesStatusList) -> {
 			ApproveValidatorDTO approveValidator = isOrderApproved(orderServicesStatusList);
 			
 			if(approveValidator.isApproved()) {
-				// TODO: Kafka Send approved status
+				kafkaTemplate.send(kafkaConfig.getApproveOrderTopic(), orderId);
 			} else {
-				// TODO: Kafka Send compensation event to all the services
+				kafkaTemplate.send(kafkaConfig.getCompensateOrderTopic(), orderId);
 			}
 		});
 	}

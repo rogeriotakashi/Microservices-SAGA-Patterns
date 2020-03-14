@@ -11,4 +11,7 @@ public class KafkaConfig {
 
 	@Value("${app.topic.pending-orders}")
 	private String pendingOrdersTopic;
+	
+	@Value("${app.topic.approve-order}")
+	protected String approveOrderTopic;
 }

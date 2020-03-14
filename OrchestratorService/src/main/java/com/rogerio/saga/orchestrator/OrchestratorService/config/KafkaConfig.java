@@ -23,12 +23,6 @@ public class KafkaConfig {
 	@Value("${app.topic.reserve-credit-response}")
 	protected String reserveCreditResponseTopic;
 
-	@Value("${app.topic.approve-order-request}")
-	protected String approveOrderRequestTopic;
-	
-	@Value("${app.topic.approve-order-response}")
-	protected String approveOrderResponseTopic;
-	
 	@Value("${app.topic.process-order-request}")
 	protected String processOrderRequestTopic;
 	
@@ -37,6 +31,12 @@ public class KafkaConfig {
 	
 	@Value("${app.topic.pending-orders}")
 	protected String pendingOrdersTopic;
+	
+	@Value("${app.topic.approve-order}")
+	protected String approveOrderTopic;
+	
+	@Value("${app.topic.compensate-order}")
+	protected String compensateOrderTopic;
 	
 	
 	/* This bean is necessary to convert the  Message (Json) to String for StringDeserialization on @KafkaListener (Consumer)*/
