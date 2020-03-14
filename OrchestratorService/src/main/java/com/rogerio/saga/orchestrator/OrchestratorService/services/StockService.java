@@ -7,7 +7,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.rogerio.saga.orchestrator.OrchestratorService.config.KafkaConfig;
-import com.rogerio.saga.orchestrator.OrchestratorService.models.ProductDTO;
+import com.rogerio.saga.orchestrator.OrchestratorService.models.dtos.ProductDTO;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.stock.ProcessOrderRequest;
 
 import lombok.extern.slf4j.Slf4j;

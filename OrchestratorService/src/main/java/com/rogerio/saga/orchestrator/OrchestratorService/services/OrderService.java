@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.rogerio.saga.orchestrator.OrchestratorService.config.KafkaConfig;
-import com.rogerio.saga.orchestrator.OrchestratorService.models.OrderDTO;
+import com.rogerio.saga.orchestrator.OrchestratorService.models.dtos.OrderDTO;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.order.CreateOrderRequest;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.response.order.CreateOrderResponse;
 

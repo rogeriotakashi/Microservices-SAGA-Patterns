@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rogerio.saga.orchestrator.OrchestratorService.models.OrderDTO;
+import com.rogerio.saga.orchestrator.OrchestratorService.models.dtos.OrderDTO;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.OrderRequest;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.response.product.CalculateTotalResponse;
 import com.rogerio.saga.orchestrator.OrchestratorService.services.CustomerService;

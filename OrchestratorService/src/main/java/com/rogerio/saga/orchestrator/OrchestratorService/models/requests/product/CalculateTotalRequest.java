@@ -2,7 +2,7 @@ package com.rogerio.saga.orchestrator.OrchestratorService.models.requests.produc
 
 import java.util.List;
 
-import com.rogerio.saga.orchestrator.OrchestratorService.models.ProductDTO;
+import com.rogerio.saga.orchestrator.OrchestratorService.models.dtos.ProductDTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

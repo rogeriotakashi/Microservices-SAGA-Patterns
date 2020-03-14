@@ -2,7 +2,7 @@ package com.rogerio.saga.orchestrator.OrchestratorService.models.requests.stock;
 
 import java.util.List;
 
-import com.rogerio.saga.orchestrator.OrchestratorService.models.ProductDTO;
+import com.rogerio.saga.orchestrator.OrchestratorService.models.dtos.ProductDTO;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.abstracts.AbstractOrder;
 
 import lombok.Data;

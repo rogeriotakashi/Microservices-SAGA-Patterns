@@ -1,4 +1,4 @@
-package com.rogerio.saga.orchestrator.OrchestratorService.models;
+package com.rogerio.saga.orchestrator.OrchestratorService.models.dtos;
 
 import lombok.Data;
 

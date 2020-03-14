@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.rogerio.saga.orchestrator.OrchestratorService.config.KafkaConfig;
 import com.rogerio.saga.orchestrator.OrchestratorService.enums.OrderStatusEnum;
-import com.rogerio.saga.orchestrator.OrchestratorService.models.OrderDTO;
+import com.rogerio.saga.orchestrator.OrchestratorService.models.dtos.OrderDTO;
 import com.rogerio.saga.orchestrator.OrchestratorService.models.requests.customer.ReserveCreditRequest;
 
 import lombok.extern.slf4j.Slf4j;

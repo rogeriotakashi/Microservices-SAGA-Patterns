@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,8 @@ public class ReserveCreditListener {
 	@Autowired
 	KafkaTemplate<String, ValidatorResponse> kafkaTemplate;
 	
-	private static final String SERVICE_NAME = "reserveCredit";
+	@Value("${spring.application.name}")
+	private String SERVICE_NAME;
 
 	@KafkaListener(topics = "#{kafkaConfig.reserveCreditRequestTopic}" , groupId = "ReserveCreditRequestGroup")
 	public void reserveCreditRequestListener(ReserveCreditRequest request) {
