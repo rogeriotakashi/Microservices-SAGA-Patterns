@@ -15,6 +15,7 @@ import com.rogerio.saga.choreography.CustomerService.enums.ValidatorEnum;
 import com.rogerio.saga.choreography.CustomerService.models.ValidatorResponse;
 import com.rogerio.saga.choreography.CustomerService.models.requests.ReserveCreditRequest;
 import com.rogerio.saga.choreography.CustomerService.services.CustomerService;
+import com.rogerio.saga.choreography.CustomerService.services.OperationHistoryService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +30,9 @@ public class ReserveCreditListener {
 	CustomerService customerService;
 	
 	@Autowired
+	OperationHistoryService operationHistoryService;
+	
+	@Autowired
 	KafkaTemplate<String, ValidatorResponse> kafkaTemplate;
 	
 	@Value("${spring.application.name}")
@@ -38,6 +42,7 @@ public class ReserveCreditListener {
 	public void reserveCreditRequestListener(ReserveCreditRequest request) {
 		log.info("Entering ReserveCrediRequest consumer. Request: {}", request);
 		ReserveStatusEnum status = customerService.reserveCredit(request.getUser(), request.getTotal());
+		operationHistoryService.debtOperation(request.getOrderId(), request.getUser(), request.getTotal());
 		
 		EnumMap<ReserveStatusEnum, Supplier<ValidatorResponse>> map = new EnumMap<>(ReserveStatusEnum.class);
 		map.put(ReserveStatusEnum.RESERVED, () -> new ValidatorResponse(request.getOrderId(), ValidatorEnum.OK, SERVICE_NAME));

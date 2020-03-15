@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rogerio.StockService.enums.ProcessStatusEnum;
-import com.rogerio.StockService.exceptions.ProductStockNotAvailibleException;
+import com.rogerio.StockService.exceptions.ProductStockNotAvailableException;
 import com.rogerio.StockService.models.requests.ProcessOrderRequest;
 import com.rogerio.StockService.services.StockService;
 
@@ -22,8 +22,8 @@ public class StockResource {
 	StockService stockService;
 	
 	@PutMapping("/process")
-	@Transactional(rollbackFor = {ProductStockNotAvailibleException.class})
-	public ResponseEntity<String> processOrder(@RequestBody ProcessOrderRequest req) throws ProductStockNotAvailibleException {
+	@Transactional(rollbackFor = {ProductStockNotAvailableException.class})
+	public ResponseEntity<String> processOrder(@RequestBody ProcessOrderRequest req) throws ProductStockNotAvailableException {
 		ProcessStatusEnum status = stockService.processOrder(req.getProductsOrdered());
 		
 		switch(status) {

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.rogerio.saga.choreography.CustomerService.enums.ReserveStatusEnum;
 import com.rogerio.saga.choreography.CustomerService.exceptions.CustomerNotFoundException;
 import com.rogerio.saga.choreography.CustomerService.models.Customer;
+import com.rogerio.saga.choreography.CustomerService.models.dtos.ChargebackDTO;
 import com.rogerio.saga.choreography.CustomerService.repositories.CustomerRepository;
 
 @Service
@@ -19,12 +20,12 @@ public class CustomerService {
 	public ReserveStatusEnum reserveCredit(String user, double total) {
 		try {
 			Optional<Customer> customerOpt = customerRepo.findByUsername(user);
-			Customer customer = customerOpt.orElseThrow(() -> new CustomerNotFoundException());
-			
+			Customer customer = customerOpt.orElseThrow(CustomerNotFoundException::new);
+
 			boolean hasEnoughCredit = total <= customer.getTotalAvailible();
 			if (hasEnoughCredit) {
 				customer.setTotalAvailible(customer.getTotalAvailible() - total);
-				customerRepo.flush();
+				customerRepo.saveAndFlush(customer);
 				return ReserveStatusEnum.RESERVED;
 			} else {
 				return ReserveStatusEnum.INSUFICIENT_CREDIT;
@@ -33,5 +34,15 @@ public class CustomerService {
 			return ReserveStatusEnum.CUSTOMER_NOT_FOUND;
 		}
 
+	}
+
+	public void chargebackCustomerByUsername(ChargebackDTO chargeback) {
+		Optional<Customer> customerOpt = customerRepo.findByUsername(chargeback.getUsername());
+
+		customerOpt.ifPresent(customer -> {
+			double currentTotal = customer.getTotalAvailible();
+			customer.setTotalAvailible( currentTotal + chargeback.getTotal());
+			customerRepo.saveAndFlush(customer);
+		});
 	}
 }

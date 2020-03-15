@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class AbstractOrder {
 	
-	private Long id;
+	private Long orderId;
 	
-	public AbstractOrder(Long id) {
-		this.id = id;
+	public AbstractOrder(Long orderId) {
+		this.orderId = orderId;
 	}
 	
 }

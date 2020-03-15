@@ -14,4 +14,7 @@ public class KafkaConfig {
 	
 	@Value("${app.topic.approve-order}")
 	protected String approveOrderTopic;
+	
+	@Value("${app.topic.compensate-order}")
+	protected String compensateOrderTopic;
 }

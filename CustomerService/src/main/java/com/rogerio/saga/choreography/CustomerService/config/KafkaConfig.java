@@ -16,6 +16,9 @@ public class KafkaConfig {
 	
 	@Value("${app.topic.response-validator}")
 	private String responseValidatorTopic;
+	
+	@Value("${app.topic.compensate-order}")
+	private String compensateOrderTopic;
 
 	
 	/* This bean is necessary to convert the  Message (Json) to String for StringDeserialization on @KafkaListener (Consumer)*/

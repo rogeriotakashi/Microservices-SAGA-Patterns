@@ -37,6 +37,11 @@ public class OrderResource {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	
+	@PostMapping("/reject")
+	public ResponseEntity<RejectOrderResponse> rejectOrder(@RequestBody RejectOrderRequest req) {
+		OrderStatusEnum status = orderService.rejectOrder(req.getOrderId());
+		RejectOrderResponse rejectOrderResponse = new RejectOrderResponse(req.getOrderId(), status);
+		return new ResponseEntity<>(rejectOrderResponse, HttpStatus.OK);
+	}
 	
 }
