@@ -4,7 +4,11 @@ This is my first project using microservice architecture and all the code will i
 
 
 # Project Diagram
+### Requesting New Order:
 ![Alt Text](https://github.com/rogeriotakashi/Microservices-SAGA-Patterns/blob/88dbb6ba9fb37a29d688b63636c460d6096074d6/Microservice-SAGA-Patterns-diagram.jpg)
+
+### After Validating Services Responses:
+![Alt Text](https://github.com/rogeriotakashi/Microservices-SAGA-Patterns/blob/master/Microservice-SAGA-Patterns-diagram%20-%20Part2.jpg)
 
 # Tecnologies
 - Java 8 (Streams, Optional, Stream API, ...)
