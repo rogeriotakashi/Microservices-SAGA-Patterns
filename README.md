@@ -11,7 +11,7 @@ This is my first project using microservice architecture and all the code will i
 ![Alt Text](https://github.com/rogeriotakashi/Microservices-SAGA-Patterns/blob/master/Microservice-SAGA-Patterns-diagram%20-%20Part2.jpg)
 
 # Tecnologies
-- Java 8 (Streams, Optional, Stream API, ...)
+- Java 8 (Streams, Optional, Function Package, ...)
 - Springboot 
 - Spring Cloud (Eureka, Config, Sleuth, ...)
 - Swagger2 (All documentation centralized in DocumentationService)
@@ -24,9 +24,9 @@ This is my first project using microservice architecture and all the code will i
 # Soon to be implemented
 - ResponseValidatorListener (Kafka Consumer)
   - Listener and table to store order services status - OK
-  - Scheduller to verify status - On Going
-- Compensation Functions - will be developed after creating the kafka producers
-- Docker images and Docker-Composer (Docker images for each service and create docker-composer for Apache Zookeper and Kafka containerization)
+  - Scheduller to verify status - OK
+- Compensation Functions - (chargeback method - OK)
+- Docker images and Docker-Composer (Docker images for each service and create docker-composer for Apache Zookeper and Kafka containerization and Services) - On going
 
 # Future implementations
 - Spring Zuul
