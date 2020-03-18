@@ -1,7 +1,5 @@
 package com.rogerio.saga.orchestrator.OrchestratorService.models.dtos;
 
-import java.util.List;
-
 import com.rogerio.saga.orchestrator.OrchestratorService.models.OrderServiceStatus;
 
 import lombok.Data;

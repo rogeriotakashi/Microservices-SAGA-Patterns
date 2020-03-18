@@ -19,9 +19,6 @@ public class ResponseValidatorListener {
 	KafkaConfig kafkaConfig;
 	
 	@Autowired
-	private KafkaTemplate<String, Long> kafkaTemplate;
-	
-	@Autowired
 	private ValidatorService validatorService;
 
 	@KafkaListener(topics = "#{kafkaConfig.responseValidatorTopic}", groupId = "ResponseValidatorGroup")

@@ -1,8 +1,5 @@
 package com.rogerio.saga.choreography.OrderService.models.requests;
 
-import java.util.UUID;
-
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

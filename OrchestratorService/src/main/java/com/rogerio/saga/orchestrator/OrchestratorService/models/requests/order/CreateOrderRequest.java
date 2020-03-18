@@ -1,7 +1,5 @@
 package com.rogerio.saga.orchestrator.OrchestratorService.models.requests.order;
 
-import java.util.UUID;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
