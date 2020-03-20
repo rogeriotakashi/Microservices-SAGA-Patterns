@@ -1,0 +1,30 @@
+  customer-service:
+    build: ./CustomerService
+    image: rogeriotakashi/customer-service
+    depends_on:
+      - eureka-server
+      - configuration-server
+  documentation-service:
+    build: ./DocumentationService
+    image: rogeriotakashi/documentation-service
+    depends_on:
+      - eureka-server
+      - configuration-server
+  orchestrator-service:
+    build: ./OrchestratorService
+    image: rogeriotakashi/orchestrator-service
+    depends_on:
+      - eureka-server
+      - configuration-server
+  order-service:
+    build: ./OrderService
+    image: rogeriotakashi/order-service
+    depends_on:
+      - eureka-server
+      - configuration-server
+  product-service:
+    build: ./ProductService
+    image: rogeriotakashi/product-service
+    depends_on:
+      - eureka-server
+      - configuration-server

@@ -1,0 +1,16 @@
+version: '3'
+services:
+  eureka-server:
+    build: ./EurekaServer
+    image: rogeriotakashi/eureka-server
+    container_name: eureka-server
+    ports:
+      - 8761:8761
+  configuration-server:
+    build: ./ConfigurationServer
+    image: rogeriotakashi/configuration-server
+    ports:
+      - 8888:8888
+    depends_on:
+      - eureka-server
+
